@@ -45,9 +45,17 @@
 	
 	By using Decision Theory, Simulations (Python built-in), and other related statistical methods, the essay aims to find out the best strategies when we face the scenarios as listed above.
 	
-	
-	\section{How Decision Theory Relates to the Topic}
-	GPT:[Decision Theory helps evaluate risk and payoff in uncertain scenarios. In Russian Roulette, every player faces probabilistic outcomes that can be represented as expected losses, allowing us to find rational strategies.]
+	\section{Analytical Approach}
+	This investigation employs two analytical methods, Decision Theory and Systematic Probability Analysis.
+
+	\subsection{Decision Theory}
+	Sections 3.1, 3.2, and 3.3 present decision problems under uncertainty. Decision Theory includes making rational choices when outcomes are probabilistic. The participant evaluates available actions (e.g., spin or not to spin) by calculating the probability of each result, then selects the action that has the lowest death probability, This transforms the game from pure chance into strategic choice. 
+
+	\subsection{Systematic Probability Analysis}
+	We systematicaly analyze how parameters (chambers, bullets, players) affect death probabilities. Rather than making decisions, we calculate the exact probabilities in multiple scenarios to discover the general patterns and derive a fairness theorem. We also define fairness as equal death probability for all players regardless of position. 
+
+	\subsection{Validation through Simulation}
+	In order to support the analysis, we use Monte Carlo simulations in Python to verify analytical results. By the law of Large Numbers, simulation results converge to theoretical probabilities as trial count increases, providing empirical validation of our formulas. 
 	
 	\section{Scenario Analysis (Simple to Complex)}
 	In scenario a, b, and c (sections 3.1-3.3), the game continues indefinitely with players alternating turns until someone dies, with barrel spinning between each shot if they choose. In In scenarios d and e (sections 3.4-3.5), we analyze a different variant: each player takes exactly ONE shot in sequence, and the game ends after m shots (or when someone dies, whichever comes first). This variant allows us to analyze position advantage and fairness more systematically. We note that in this variant, there is a probability that all players survive (when the bullet is in a chamber that no player reaches).
@@ -249,19 +257,36 @@
 		\subsubsection{\textbf{Fairness Analysis}}
 		
 		\begin{adjustwidth}{2em}{0pt}
-			\textbf{Theorem:} A Russian Roulette game (Variant A: one shot per player) with $C$ chambers, $n$ bullets, and $m$ players is fair if and only if $n = 1$.\\[6pt]
+			\textbf{Defining Fairness}
+			In game theory and decision analysis, a game is considered "fair" when all participants face identical risks or rewards, independent of factors like turn order or position. In the context of the Russian Roulette, we define fairness as follows:
+			\textbf{Definition:} A Russian Roulette game is \textbf{fair} if and only if all players have equal death probability, regardless of their position in the turn order. \\[2pt]
+			Mathematically, for a game with m players: 
+
+			\textbf{Equation To Be Implemented} \\[2pt]
+			This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn.
+
+			\textbf{The Fairness Theorem}
+			Based on our systematic explorations above, we can now state our main throretical result.
+			\textbf{Theorem(Fairness Condition):} $For a Russioan Roulette game with C chambers, n bullets, and m players (where $m \le C$ and $n \le C$), the game is fair if and only if n = 1$ \\[2pt]
+			This theorem has two parts we must prove: \\[2pt]
+			\begin{itemize}
+			\item \textbf{If $n = 1$, then the game is fair} (Sufficiency)
+			\item \textbf{If the game is fair, then $n = 1$} (Necessity), equivalently, if $n \neq 1$, the game is not fair
+			\end{itemize}
 			
-			\textbf{Proof:} When $n = 1$: \\[4pt]
+			\textbf{Proof}\\[2pt]
+			\textbf{Part 1: Sufficiency}\\[4pt]
+			We already derived in previous sections that when $n = 1$, the general formula simplifies through telescoping:
 			
 			\begin{align*}
 				P(\text{Player } i \text{ dies}) 
-				&= P(\text{all before survive}) \times P(\text{bullet in position } i) \\[4pt]
-				&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \dots \times 
-				\frac{1}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[6pt]
+				&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \frac{C-3}{C-2} \times \dots \times 
+				\frac{C-(i-1)}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[6pt]
 				&= \frac{1}{C}
 			\end{align*}
 			
-			Since this is independent of $i$, all players have equal probability $\tfrac{1}{C}$. Therefore, the game is fair when $n = 1$.
+			Since this is \textbf{independent of $i$}, all players have equal probability $\tfrac{1}{C}$ when $n = 1$.
+			Therefore, if $n = 1$, then P(\text{Player } i \text{ dies}) = $\tfrac{1}{C}$ for all $i$, which means the game is fair. 
 		\end{adjustwidth}
 		
 		
