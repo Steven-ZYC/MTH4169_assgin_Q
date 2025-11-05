@@ -14,12 +14,12 @@
 	% ====== Title ======
 	\title{Position Advantage and Fairness in Russian Roulette:\\A Decision-Theoretic Analysis of Survival Strategies}
 	
-	\author{Zihao Huang (11533765)  Lam Chun Kit (11540512)  Yancheng Zhang (11537668) \\[4pt]
+	\author{Zihao Huang (11533765)  Lam Chun Kit (11540512)  Yancheng Zhang (11537668) \\
 		Department of Mathematics and Information Technology\\
 		The Education University of Hong Kong\\
-		MTH4169: Introduction to Probability and Statistics\\[4pt]
-		Professor Zhang Junyi\\[4pt]
-		November 1, 2025}
+		MTH4169: Introduction to Probability and Statistics\\
+		Professor Zhang Junyi\\
+		November 11, 2025}
 	
 	\maketitle
 	
@@ -47,256 +47,332 @@
 	
 	\section{Analytical Approach}
 	This investigation employs two analytical methods, Decision Theory and Systematic Probability Analysis.
-
+	
 	\subsection{Decision Theory}
 	Sections 3.1, 3.2, and 3.3 present decision problems under uncertainty. Decision Theory includes making rational choices when outcomes are probabilistic. The participant evaluates available actions (e.g., spin or not to spin) by calculating the probability of each result, then selects the action that has the lowest death probability, This transforms the game from pure chance into strategic choice. 
-
+	
 	\subsection{Systematic Probability Analysis}
-	We systematicaly analyze how parameters (chambers, bullets, players) affect death probabilities. Rather than making decisions, we calculate the exact probabilities in multiple scenarios to discover the general patterns and derive a fairness theorem. We also define fairness as equal death probability for all players regardless of position. 
-
+	We systematically analyze how parameters (chambers, bullets, players) affect death probabilities. Rather than making decisions, we calculate the exact probabilities in multiple scenarios to discover the general patterns and derive a fairness theorem. We also define fairness as equal death probability for all players regardless of position. 
+	
 	\subsection{Validation through Simulation}
 	In order to support the analysis, we use Monte Carlo simulations in Python to verify analytical results. By the law of Large Numbers, simulation results converge to theoretical probabilities as trial count increases, providing empirical validation of our formulas. 
 	
 	\section{Scenario Analysis (Simple to Complex)}
 	In scenario a, b, and c (sections 3.1-3.3), the game continues indefinitely with players alternating turns until someone dies, with barrel spinning between each shot if they choose. In In scenarios d and e (sections 3.4-3.5), we analyze a different variant: each player takes exactly ONE shot in sequence, and the game ends after m shots (or when someone dies, whichever comes first). This variant allows us to analyze position advantage and fairness more systematically. We note that in this variant, there is a probability that all players survive (when the bullet is in a chamber that no player reaches).
 	
-		\subsection{Traditional with Spinning (a)}
-		This is quite different from the original playing method of Russian Roulette, which adds the condition of ``spinning the barrel after every trigger pull''. Will you choose to be the first or the second player? And what is the probability of loss?
-		
-		For the answer, as each time the barrel spins after every trigger pull, it is independent. Assume that the probability of loss for the first player is $p$, and $1 - p$ for the second player.
-		
-		\begin{equation}
-			p = \frac{1}{6} \times 1 + \frac{5}{6} \times (1 - p) \Rightarrow p = \frac{6}{11}
-		\end{equation}
-		
-		Therefore, the probability of loss for the player who goes first is $\tfrac{6}{11}$ and $\tfrac{5}{11}$ for who goes second.
-		
-		Obviously, you should choose to go second.
-		
+	\subsection{Traditional with Spinning (a)}
+	This is quite different from the original playing method of Russian Roulette, which adds the condition of ``spinning the barrel after every trigger pull''. Will you choose to be the first or the second player? And what is the probability of loss?
 	
-		\subsection{Two Random Bullets (b)}
-		Compared to the original version, this time there are two bullets in the total of six chambers instead of one. This time we do not choose to go first or second. Your opponent played the first and he was alive after the first trigger pull. You are given the decision whether to spin the barrel (Zhou, 2008). Should you spin the barrel?
-		The answer is to spin the barrel. It is quite simple. If you do not spin the barrel, you will have a probability of $\tfrac{2}{5}$ of loss because your opponent has survived, which leaves five chambers with two bullets. If you spin the barrel, you will have a probability of $\tfrac{2}{6}$ of loss, like a reset, that everything goes 
-		
+	For the answer, as each time the barrel spins after every trigger pull, it is independent. Assume that the probability of loss for the first player is $p$, and $1 - p$ for the second player.
 	
-		\subsection{Two Consecutive Bullets (c)}
-		Based on the two random bullet scenarios, we have added a new condition that the two bullets are randomly put in two consecutive positions. Thus, if your opponent survived his first round, should you spin the barrel~\cite{zhou2008}?
-		
-		Listing all the positions that the bullets can appear before proceeding. There are only six possible situations: (1,2), (2,3), (3,4), (4,5), (5,6), (6,1), where the numbers from 1 to 6 each represent a position of the chamber.
-		
-		According to the question, we know that the first chamber is empty, which means the possible positions of (1,2) and (6,1) do not apply. The probability of loss will be $\tfrac{1}{4}$ if not spinning the barrel, because from the remaining possible situations, only (2,3) applies that the second shot has a bullet. If spinning the barrel, it means everything resets, and the probability of loss will be $\tfrac{1}{3}$ because there are two out of six possible situations: (1,2) and (6,1), where the first shot is with a bullet.
-		
+	\begin{equation}
+		p = \frac{1}{6} \times 1 + \frac{5}{6} \times (1 - p) \Rightarrow p = \frac{6}{11}
+	\end{equation}
 	
-		\subsection{N Chambers, n Bullets, m People (d)}
-		Besides merely sticking on 6 chambers, 1 bullet, and 2 people games, we are going to explore more about this game with more variants, focusing on the position advantage and fairness. Changing the number of chambers, bullets, or participants may each has great impact to the game, so how do we decide in more complex situations in a rational way is what we are going to explore. 
+	Therefore, the probability of loss for the player who goes first is $\tfrac{6}{11}$ and $\tfrac{5}{11}$ for who goes second.
+	
+	Obviously, you should choose to go second.
+	
+	
+	\subsection{Two Random Bullets (b)}
+	Compared to the original version, this time there are two bullets in the total of six chambers instead of one. This time we do not choose to go first or second. Your opponent played the first and he was alive after the first trigger pull. You are given the decision whether to spin the barrel (Zhou, 2008). Should you spin the barrel?
+	The answer is to spin the barrel. It is quite simple. If you do not spin the barrel, you will have a probability of $\tfrac{2}{5}$ of loss because your opponent has survived, which leaves five chambers with two bullets. If you spin the barrel, you will have a probability of $\tfrac{2}{6}$ of loss, like a reset, that everything goes 
+	
+	
+	\subsection{Two Consecutive Bullets (c)}
+	Based on the two random bullet scenarios, we have added a new condition that the two bullets are randomly put in two consecutive positions. Thus, if your opponent survived his first round, should you spin the barrel~\cite{zhou2008}?
+	
+	Listing all the positions that the bullets can appear before proceeding. There are only six possible situations: (1,2), (2,3), (3,4), (4,5), (5,6), (6,1), where the numbers from 1 to 6 each represent a position of the chamber.
+	
+	According to the question, we know that the first chamber is empty, which means the possible positions of (1,2) and (6,1) do not apply. The probability of loss will be $\tfrac{1}{4}$ if not spinning the barrel, because from the remaining possible situations, only (2,3) applies that the second shot has a bullet. If spinning the barrel, it means everything resets, and the probability of loss will be $\tfrac{1}{3}$ because there are two out of six possible situations: (1,2) and (6,1), where the first shot is with a bullet.
+	
+	
+	\subsection{N Chambers, n Bullets, m People (d)}
+	Besides merely sticking on 6 chambers, 1 bullet, and 2 people games, we are going to explore more about this game with more variants, focusing on the position advantage and fairness. Changing the number of chambers, bullets, or participants may each has great impact to the game, so how do we decide in more complex situations in a rational way is what we are going to explore. \\[4pt]
+	
+	\subsubsection{\textbf{Building from the Ground Up: The Base Case}}
+	
+	\begin{adjustwidth}{2em}{0pt}
+		Starting from $N=2$, $n=1$, $m=2$, no spinning.\\
+		Sample space: $\{B,E\}$ where $B=$ bullet, $E=$ empty.\\
+		Possible configurations: $(B,E)$ or $(E,B)$ — equally likely.\\[4pt]
 		
-		\subsubsection{\textbf{Building from the Ground Up: The Base Case}}
-		
-		\begin{adjustwidth}{2em}{0pt}
-			Starting from $N=2$, $n=1$, $m=2$, no spinning.\\[4pt]
-			Sample space: $\{B,E\}$ where $B=$ bullet, $E=$ empty.\\
-			Possible configurations: $(B,E)$ or $(E,B)$ — equally likely.\\[4pt]
+		% 用 description 突出场景
+		\begin{description}[leftmargin=1.8em,labelsep=.5em,font=\bfseries]
+			\item[Scenario 1.] $(B,E)$\\
+			\quad Player 1 pulls chamber 1 $\Rightarrow$ dies.\\
+			\quad Game ends.\\[4pt]
 			
-			% 用 description 突出场景
-			\begin{description}[leftmargin=1.8em,labelsep=.5em,font=\bfseries]
-				\item[Scenario 1.] $(B,E)$\\
-				\quad Player 1 pulls chamber 1 $\Rightarrow$ dies.\\
-				\quad Game ends.\\[4pt]
-				
-				\item[Scenario 2.] $(E,B)$\\
-				\quad Player 1 pulls chamber 1 $\Rightarrow$ survives.\\
-				\quad Player 2 pulls chamber 2 $\Rightarrow$ dies.\\[4pt]
-			\end{description}
-			
-			% 为了避免右侧顶栏：用短记号并 align* 对齐
-			Let $B_1$ denote “bullet in chamber 1”, $E_1$ “empty in chamber 1”, and $B_2$ “bullet in chamber 2”. Then
-			\begin{align*}
-				\P(\text{P1 dies}) &= \P(B_1) = \tfrac{1}{2},\\
-				\P(\text{P2 dies}) &= \P(E_1)\,\P(B_2 \mid E_1) = \tfrac{1}{2}.
-			\end{align*}
-		\end{adjustwidth}
+			\item[Scenario 2.] $(E,B)$\\
+			\quad Player 1 pulls chamber 1 $\Rightarrow$ survives.\\
+			\quad Player 2 pulls chamber 2 $\Rightarrow$ dies.\\[4pt]
+		\end{description}
 		
-		Thus, we find that this game is fair, no matter which position is chosen. Both players have equal $50\%$ death probability.
-		
-		\subsubsection{\textbf{Scaling Chambers}}
-		
-		Now we add a little complexity to the game. We only change the number of chambers to 3. Now the game involves: $N = 3$, $n = 1$, $m = 2$, no spinning.\\[6pt]
-		
-		\textbf{Player 1’s turn:}\\
-		\[
-		P(\text{Player 1 dies}) = \tfrac{1}{3}
-		\]
-		
-		\textbf{Player 2’s turn:}\\
-		\[
-		P(\text{Player 2 dies} \mid \text{Player 1 survives}) = \tfrac{1}{2}
-		\]
-		
-		Therefore, we find that this game is still fair, with both players have equal 33.33\% death.
+		% 为了避免右侧顶栏：用短记号并 align* 对齐
+		Let $B_1$ denote “bullet in chamber 1”, $E_1$ “empty in chamber 1”, and $B_2$ “bullet in chamber 2”. Then
+		\begin{align*}
+			\P(\text{P1 dies}) &= \P(B_1) = \tfrac{1}{2},\\
+			\P(\text{P2 dies}) &= \P(E_1)\,\P(B_2 \mid E_1) = \tfrac{1}{2}.
+		\end{align*}
+	\end{adjustwidth}
 	
-		\subsubsection{\textbf{Pattern Recognition}}
-		
-		Now, we are going to explore the death probability if there are more chambers, where there is still one bullet and two people.
-		
-		\renewcommand{\arraystretch}{1.4} % 放大 1.4 倍，可调为 1.3~1.6
-		\begin{table}[h!]
-			\centering
-			\caption{Death Probabilities with Increasing Chambers}
-			\begin{tabular}{@{}cccc@{}}
-				\toprule
-				\textbf{Chambers} & $P(\text{Player 1 dies})$ & $P(\text{Player 2 dies})$ & \textbf{Fair?} \\
-				\midrule
-				2 & $\tfrac{1}{2}$ & $\tfrac{1}{2}$ & \checkmark \\
-				3 & $\tfrac{1}{3}$ & $\tfrac{1}{3}$ & \checkmark \\
-				4 & $\tfrac{1}{4}$ & $\tfrac{1}{4}$ & \checkmark \\
-				5 & $\tfrac{1}{5}$ & $\tfrac{1}{5}$ & \checkmark \\
-				6 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & \checkmark \\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		\renewcommand{\arraystretch}{1.0} % 恢复默认值（防止影响后续表格）
-		
-		
-		The process in which chambers vary can be seen from the appendix.
-		
-		It is worth noting that the sum of $P(\text{Player 1 dies})$ and $P(\text{Player 2 dies})$ does not equal $1$. This is because, in this game variant, there is a probability that both players survive. For example, with $C = 6$, there is a $\tfrac{2}{3}$ probability that the bullet remains in chambers 3--6, meaning both players survive their single shot. This distinguishes our analysis from the traditional ``play until someone dies'' variant analyzed in Section~3.1.
+	Thus, we find that this game is fair, no matter which position is chosen. Both players have equal $50\%$ death probability.
 	
-		\subsubsection{\textbf{Adding More Bullets}}
-		Now the game becomes unfair where there are 6 chambers, 2 bullets, and 2 people:\\
-		
-		\begin{adjustwidth}{2em}{0pt}
+	\subsubsection{\textbf{Scaling Chambers}}
+	
+	Now we add a little complexity to the game. We only change the number of chambers to 3. Now the game involves: $N = 3$, $n = 1$, $m = 2$, no spinning.\\[6pt]
+	
+	\textbf{Player 1’s turn:}\\
+	\[
+	P(\text{Player 1 dies}) = \tfrac{1}{3}
+	\]
+	
+	\textbf{Player 2’s turn:}\\
+	\[
+	P(\text{Player 2 dies} \mid \text{Player 1 survives}) = \tfrac{1}{2}
+	\]
+	
+	Therefore, we find that this game is still fair, with both players have equal 33.33\% death.
+	
+	\subsubsection{\textbf{Pattern Recognition}}
+	
+	Now, we are going to explore the death probability if there are more chambers, where there is still one bullet and two people.
+	
+	\renewcommand{\arraystretch}{1.4} % 放大 1.4 倍，可调为 1.3~1.6
+	\begin{table}[h!]
+		\centering
+		\caption{Death Probabilities with Increasing Chambers}
+		\begin{tabular}{@{}cccc@{}}
+			\toprule
+			\textbf{Chambers} & $P(\text{Player 1 dies})$ & $P(\text{Player 2 dies})$ & \textbf{Fair?} \\
+			\midrule
+			2 & $\tfrac{1}{2}$ & $\tfrac{1}{2}$ & \checkmark \\
+			3 & $\tfrac{1}{3}$ & $\tfrac{1}{3}$ & \checkmark \\
+			4 & $\tfrac{1}{4}$ & $\tfrac{1}{4}$ & \checkmark \\
+			5 & $\tfrac{1}{5}$ & $\tfrac{1}{5}$ & \checkmark \\
+			6 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & \checkmark \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	\renewcommand{\arraystretch}{1.0} % 恢复默认值（防止影响后续表格）
+	
+	
+	The process in which chambers vary can be seen from the appendix.
+	
+	It is worth noting that the sum of $P(\text{Player 1 dies})$ and $P(\text{Player 2 dies})$ does not equal $1$. This is because, in this game variant, there is a probability that both players survive. For example, with $C = 6$, there is a $\tfrac{2}{3}$ probability that the bullet remains in chambers 3--6, meaning both players survive their single shot. This distinguishes our analysis from the traditional ``play until someone dies'' variant analyzed in Section~3.1.
+	
+	\subsubsection{\textbf{Adding More Bullets}}
+	Now the game becomes unfair where there are 6 chambers, 2 bullets, and 2 people:\\
+	
+	\begin{adjustwidth}{2em}{0pt}
 		\begin{align*}
 			\P(\text{P1 dies}) &= \tfrac{2}{6} = \tfrac{1}{3},\\[6pt]
 			\P(\text{P2 dies}) 
 			&= \P(\text{P1 survives}) \times \P(\text{P2 dies} \mid \text{P1 survives}) \\
 			&= \tfrac{4}{6} \times \tfrac{2}{5} = \tfrac{4}{15}.
 		\end{align*}
-		\end{adjustwidth}
+	\end{adjustwidth}
+	
+	
+	Obviously, player 2 has advantage, as $\tfrac{1}{3} > \tfrac{4}{15}$.\\[6pt]
+	
+	Now let’s discover if there are more bullets in the definite six-chamber pistol with two participants.
+	
+	
+	
+	\begin{table}[h]
+		\centering
+		\caption{Effect of Bullet Count on Fairness}
+		\begin{tabular}{cccc}
+			\toprule
+			Bullets & Player 1 & Player 2 & Advantage \\
+			\midrule
+			1 & $1/6$ & $1/6$ & Fair \\
+			2 & $1/3$ & $4/15$ & Player 2 \\
+			3 & $1/2$ & $3/10$ & Player 2 \\
+			4 & $2/3$ & $4/15$ & Player 2 \\
+			5 & $5/6$ & $1/6$ & Player 2 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	From the table, when $n=1$, the game is fair. As $n$ increases, Player 2 gains advantage, especially when $n$ is moderate (2--3 bullets).
+	
+	
+	\subsubsection{\textbf{ Adding a Third Player}}
+	
+	\begin{adjustwidth}{2em}{0pt}
+		Things get interesting because now we have the third player to participate in the game. The number of chambers is still six, one bullet, but three people now.
 		
+		\begin{align*}
+			P(\text{Player 1 dies}) &= \tfrac{1}{6},\\
+			P(\text{Player 2 dies}) &= \tfrac{5}{6} \times \tfrac{1}{5} = \tfrac{1}{6},\\
+			P(\text{Player 3 dies}) &= \tfrac{5}{6} \times \tfrac{4}{5} \times \tfrac{1}{4} = \tfrac{1}{6}.
+		\end{align*}
 		
-		Obviously, player 2 has advantage, as $\tfrac{1}{3} > \tfrac{4}{15}$.\\[6pt]
+		Now, we know that whatever which person shoots the first or second or the third, each person’s death probability is still the same.\\[6pt]
+		What if there are more players?\\
 		
-		Now let’s discover if there are more bullets in the definite six-chamber pistol with two participants.
-		
-		
-		
-		\begin{table}[h]
+		\begin{table}[h!]
 			\centering
-			\caption{Effect of Bullet Count on Fairness}
-			\begin{tabular}{cccc}
-				\toprule
-				Bullets & Player 1 & Player 2 & Advantage \\
-				\midrule
-				1 & $1/6$ & $1/6$ & Fair \\
-				2 & $1/3$ & $4/15$ & Player 2 \\
-				3 & $1/2$ & $3/10$ & Player 2 \\
-				4 & $2/3$ & $4/15$ & Player 2 \\
-				5 & $5/6$ & $1/6$ & Player 2 \\
-				\bottomrule
-			\end{tabular}
+			\caption{Death Probabilities with Increasing Number of Players (6 Chambers, 1 Bullet)}
+			\renewcommand{\arraystretch}{1.4}
+			\resizebox{\columnwidth}{!}{%
+				\begin{tabular}{@{}cccccc@{}}
+					\toprule
+					\textbf{Number of people} & $P(\text{P1 dies})$ & $P(\text{P2 dies})$ & $P(\text{P3 dies})$ & $P(\text{P4 dies})$ & $P(\text{P5 dies})$ \\
+					\midrule
+					2 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A & N/A & N/A \\
+					3 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A & N/A \\
+					4 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A \\
+					5 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ \\
+					\bottomrule
+				\end{tabular}%
+			}
 		\end{table}
 		
-		From the table, when $n=1$, the game is fair. As $n$ increases, Player 2 gains advantage, especially when $n$ is moderate (2--3 bullets).
+		
+		The process in which number of people varies can be seen from the appendix.
+	\end{adjustwidth}
+	
+	\subsubsection{\textbf{The General Formula}}
+	
+	\begin{adjustwidth}{2em}{0pt}
+		For Player $i$ in a game with $C$ chambers, $n$ bullets, and $m$ players: \\
+		
+		\begin{align*}
+			P(\text{Player } i \text{ dies})
+			&= P(\text{all before survive}) 
+			\times P(\text{hit bullet} \mid \text{previous survive}) \\[4pt]
+			&= \frac{C-n}{C} \times \frac{C-n-1}{C-1} \times \dots 
+			\times \frac{C-n-(i-2)}{C-(i-2)} \times \frac{n}{C-(i-1)} \\[4pt]
+			&= \frac{n}{C} 
+			\quad (\text{when } n = 1,\ \text{regardless of } i \text{ or } C\text{)}
+		\end{align*}
 		
 		
-		\subsubsection{\textbf{ Adding a Third Player}}
-		
-		\begin{adjustwidth}{2em}{0pt}
-			Things get interesting because now we have the third player to participate in the game. The number of chambers is still six, one bullet, but three people now.
-			
-			\begin{align*}
-				P(\text{Player 1 dies}) &= \tfrac{1}{6},\\
-				P(\text{Player 2 dies}) &= \tfrac{5}{6} \times \tfrac{1}{5} = \tfrac{1}{6},\\
-				P(\text{Player 3 dies}) &= \tfrac{5}{6} \times \tfrac{4}{5} \times \tfrac{1}{4} = \tfrac{1}{6}.
-			\end{align*}
-			
-			Now, we know that whatever which person shoots the first or second or the third, each person’s death probability is still the same.\\[6pt]
-			What if there are more players?\\
-			
-			\begin{table}[h!]
-				\centering
-				\caption{Death Probabilities with Increasing Number of Players (6 Chambers, 1 Bullet)}
-				\renewcommand{\arraystretch}{1.4}
-				\resizebox{\columnwidth}{!}{%
-					\begin{tabular}{@{}cccccc@{}}
-						\toprule
-						\textbf{Number of people} & $P(\text{P1 dies})$ & $P(\text{P2 dies})$ & $P(\text{P3 dies})$ & $P(\text{P4 dies})$ & $P(\text{P5 dies})$ \\
-						\midrule
-						2 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A & N/A & N/A \\
-						3 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A & N/A \\
-						4 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A \\
-						5 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ \\
-						\bottomrule
-					\end{tabular}%
-				}
-			\end{table}
-			
-			
-			The process in which number of people varies can be seen from the appendix.
-		\end{adjustwidth}
-		
-		\subsubsection{\textbf{The General Formula}}
-		
-		\begin{adjustwidth}{2em}{0pt}
-			For Player $i$ in a game with $C$ chambers, $n$ bullets, and $m$ players: \\
-			
-			\begin{align*}
-				P(\text{Player } i \text{ dies})
-				&= P(\text{all before survive}) 
-				\times P(\text{hit bullet} \mid \text{previous survive}) \\[4pt]
-				&= \frac{C-n}{C} \times \frac{C-n-1}{C-1} \times \dots 
-				\times \frac{C-n-(i-2)}{C-(i-2)} \times \frac{n}{C-(i-1)} \\[4pt]
-				&= \frac{n}{C} 
-				\quad (\text{when } n = 1,\ \text{regardless of } i \text{ or } C\text{)}
-			\end{align*}
-			
-			
-		\end{adjustwidth}
-		
-		
-		\subsubsection{\textbf{Fairness Analysis}}
-		
-		\begin{adjustwidth}{2em}{0pt}
-			\textbf{Defining Fairness}
-			In game theory and decision analysis, a game is considered "fair" when all participants face identical risks or rewards, independent of factors like turn order or position. In the context of the Russian Roulette, we define fairness as follows:
-			\textbf{Definition:} A Russian Roulette game is \textbf{fair} if and only if all players have equal death probability, regardless of their position in the turn order. \\[2pt]
-			Mathematically, for a game with m players: 
-
-			\textbf{Equation To Be Implemented} \\[2pt]
-			This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn.
-
-			\textbf{The Fairness Theorem}
-			Based on our systematic explorations above, we can now state our main throretical result.
-			\textbf{Theorem(Fairness Condition):} $For a Russioan Roulette game with C chambers, n bullets, and m players (where $m \le C$ and $n \le C$), the game is fair if and only if n = 1$ \\[2pt]
-			This theorem has two parts we must prove: \\[2pt]
-			\begin{itemize}
+	\end{adjustwidth}
+	
+	
+	\subsubsection{\textbf{Fairness Analysis}}
+	
+	\begin{adjustwidth}{2em}{0pt}
+		\textbf{Defining Fairness}\\
+		In game theory and decision analysis, a game is considered "fair" when all participants face identical risks or rewards, independent of factors like turn order or position. In the context of the Russian Roulette, we define fairness as follows: \\[4pt]
+		\textbf{Definition}\\
+		A Russian Roulette game is \textbf{fair} if and only if all players have equal death probability, regardless of their position in the turn order. 
+		Mathematically, for a game with m players: 
+		\begin{align*}
+			Fair \Longleftrightarrow P(Player 1 dies) = P(Player 2 dies) = ... = P(Player m dies)
+		\end{align*}
+		\textbf{Equation To Be Implemented} \\
+		This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn. \\[4pt]
+		\textbf{The Fairness Theorem} \\
+		Based on our systematic explorations above, we can now state our main throretical result. \\[4pt]
+		\textbf{Theorem (Fairness Condition)} \\
+		For a Russioan Roulette game with C chambers, n bullets, and m players (where $m \le C$ and $n \le C$), the game is fair if and only if $n = 1$ \\
+		This theorem has two parts we must prove: \\
+		\begin{itemize}
 			\item \textbf{If $n = 1$, then the game is fair} (Sufficiency)
 			\item \textbf{If the game is fair, then $n = 1$} (Necessity), equivalently, if $n \neq 1$, the game is not fair
-			\end{itemize}
-			
-			\textbf{Proof}\\[2pt]
-			\textbf{Part 1: Sufficiency}\\[4pt]
-			We already derived in previous sections that when $n = 1$, the general formula simplifies through telescoping:
-			
-			\begin{align*}
-				P(\text{Player } i \text{ dies}) 
-				&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \frac{C-3}{C-2} \times \dots \times 
-				\frac{C-(i-1)}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[6pt]
-				&= \frac{1}{C}
-			\end{align*}
-			
-			Since this is \textbf{independent of $i$}, all players have equal probability $\tfrac{1}{C}$ when $n = 1$.
-			Therefore, if $n = 1$, then P(\text{Player } i \text{ dies}) = $\tfrac{1}{C}$ for all $i$, which means the game is fair. 
-		\end{adjustwidth}
+		\end{itemize}
+		\textbf{Proof}\\
+		\textbf{Part 1: Sufficiency}\\[4pt]
+		We already derived in previous sections that when $n = 1$, the general formula simplifies through telescoping:
 		
+		\begin{align*}
+			P(\text{Player } i \text{ dies}) 
+			&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \frac{C-3}{C-2} \times \dots \times 
+			\frac{C-(i-1)}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[6pt]
+			&= \frac{1}{C}
+		\end{align*}
 		
-		\subsubsection{Visualization}
-		\textit{(Implemented by Zhang)}
+		Since this is \textbf{independent of $i$}, all players have equal probability $\tfrac{1}{C}$ when $n = 1$.
+		Therefore, if $n = 1$, then P(\text{Player } i \text{ dies}) = $\tfrac{1}{C}$ for all $i$, which means the game is fair. \\[4pt]
+		\textbf{Part 2: Necessity}\\
+		We have proved that: if $n \geq 2$, the game becomes unfair. 
+		From our general formula: 
 		
-		\subsection{Optimal Stopping Problem (e)}
-		\textit{(Implemented by Lam)}
+		\begin{align*}
+			P(Player 1 dies)= \frac{n}{C}
+		\end{align*}
+		\begin{align*}
+			P(Player 2 dies)= \frac{C-n}{C} \times \frac{n}{C-1}=\frac{n(C-n)}{C(C-1)}
+		\end{align*}
+		For the game to be fair, these must be equal. 
+		\begin{align*}
+			\frac{n}{C}= \frac{C-n}{C} \times \frac{n}{C-1}=\frac{n(C-n)}{C(C-1)}
+		\end{align*}
+		Assuming $n > 0$ (otherwise there is no game), we can divide both side by $\frac{n}{C}$:
+		\begin{align*}
+			1=\frac{C-n}{C-1}\\
+			C-1 = C-n\\
+			n = 1
+		\end{align*}
+		This shows that \textbf{if} Player 1 and Player 2 have equal death probabiilty, \textbf{then} n must equal 1. 
+		Thus, if $n \neq 1$ or if $n \geq 2$, then $P(Player 1 dies) \neq P(Player 2 dies)$, meaning the game is unfair. So, the game is fair if and only if  $n = 1$.\\[4pt]
+		\textbf{Which Player Has the Advantage When $n \geq 2$? }\\
+		We have found out that the game is unfair when $n \geq 2$, but who benefits from this unfairness?
+		Let's compare Player 1 and Player 2:
+		
+		\begin{align*}
+			P(Player 1 dies)-P(Player 2 dies)=\frac{n}{C}-\frac{n(C-n)}{C(C-1)}
+		\end{align*}
+		Factor out $\frac{n}{C}$
+		\begin{align*}
+			=\frac{n}{C} \lbrack 1-\frac{C-n}{C-1} \rbrack \\
+			=\frac{n}{C} \lbrack \frac{C-1-(C-n)}{C-1} \rbrack \\
+			=\frac{n}{C} \times \frac{n-1}{C-1}
+		\end{align*}
+		Carefully examining, When $n=1$, the difference equals 0 (fairness). When $n \geq 2$, Since $n-1 \geq 1 > 0$, the difference is strictly positive. Thus, when $n \geq 2$, we have $P(Player 1 dies)>P(Player 2 dies)$, meaning $\textbf{Player 2 has a survival advantage}$.
+		This advantage increases with n. The later you go in the turn order, the better your chances of survival (up to a point). 
+		Let's verify our theorem against the data we collected from $4) \textbf{\textit{ Adding More Bullets}}$
+		\begin{table}[h]
+			\centering
+			\caption{Effect of Bullet Count on Fairness with Difference}
+			\begin{tabular}{ccccc}
+				\toprule
+				Bullets & Player 1 & Player 2 & Difference & Fair? \\
+				\midrule
+				1 & $1/6$ & $1/6$ & $0.000$ & \checkmark \\
+				2 & $1/3$ & $4/15$ & $0.067$ & $\times$ \\
+				3 & $1/2$ & $3/10$ & $0.200$ & $\times$ \\
+				4 & $2/3$ & $4/15$ & $0.400$ & $\times$ \\
+				5 & $5/6$ & $1/6$ & $0.667$ & $\times$ \\
+				\bottomrule
+			\end{tabular}
+		\end{table}\\
+		The data confirms our theorem: fairness occurs only when $n=1$.
+		Notice that the advantage for Player 2 grows as the number of bullets(n) increases, reaching a maximum difference of 0.667 when $n=5$. \\[4pt]
+		\textbf{Insights: The single-Bullet Special Case}\\
+		The fact that $n = 1$ produces a fair game is mathematically elegant. Despite players going in sequence and gaining information from previous survivors, the conditional probabilities perfectly balance out. The bullet "doesn't care" about turn order when there is only one.\\[4pt]
+		\textbf{Insights: Why Multiple Bullets Create Unfairness}\\
+		When $n \geq 2$, Player 1 faces n bullets among C chambers (probability $\frac{n}{C}$). If Player 1 survives, they've eliminated one safe chamber but no bullets. Player 2 now faces n bullets among only $C-1$ chambers, but this ratio $\frac{n}{C-1}$ is less deadly than $\frac{n}{C}$ because the denominator decreased by 1 while bullets stayed constant. Mathematically:
+		\begin{align*}
+			\frac{n}{C-1} < \frac{n}{C} \text{ for all } n \geq  \text{,} C \geq 2.
+		\end{align*}
+
+		However, Player 2 only reaches their turn if Player 1 survives, which happens with probability $\frac{C-n}{C}$. The combined effect still favors Player 2 when $n \geq 2$.\\[4pt]
+		\textbf{Insights: Practical Decision-Making}\\
+		If forced to play Russian Roulette with $n \geq 2$ bullets, rational players should prefer later positions. With $n = 5$ bullets in a 6-chamber gun, Player 2's death probability $\frac{1}{6}$ is dramatically better than Player 1's $\frac{5}{6}$.\\[4pt]
+		\textbf{Insights: Fairness as a Design Principle}\\
+		From a game design perspective, if we want to create a "fair" Russian Roulette variant (perhaps as a thought experiment or decision-making exercise), we must use exactly one bullet regardless of how many chambers or players are involved.\\[4pt]
+		\textbf{Measuring Unfairness: The Fairness Index}\\
+		To quantify how unfair a game is, we can define a \textbf{fairness} index as the standard deviation of death probabilities across all players. For two players:
+		\begin{align*}
+			Fairness Index=\sqrt{\frac{\square{\lbrack P(P1)-Phat\rbrack}+\square{\lbrack P(P2)-Phat\rbrack}}{2}}
+		\end{align*}
+
+		
+	\end{adjustwidth}
 	
-	\section*{References}
+	\subsubsection{Visualization}
+	\textit{(Implemented by Zhang)}
+	
+	\subsection{Optimal Stopping Problem (e)}
+	\textit{(Implemented by Lam)}
+	
+	\section*{}
 	\begin{thebibliography}{9}
 		\bibitem{zhou2008} X. Zhou, \textit{Practical Guide to Quantitative Finance Interviews}, CreateSpace, 2008.
 		\bibitem{sternstein2024} M. Sternstein, \textit{AP Statistics Premium, 2025}, Kaplan North America, LLC, 2024.
