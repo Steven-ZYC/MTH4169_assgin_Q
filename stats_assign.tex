@@ -360,13 +360,29 @@
 		\textbf{Measuring Unfairness: The Fairness Index}\\
 		To quantify how unfair a game is, we can define a \textbf{fairness} index as the standard deviation of death probabilities across all players. For two players:
 		\begin{align*}
-			Fairness Index=\sqrt{\frac{\square{\lbrack P(P1)-Phat\rbrack}+\square{\lbrack P(P2)-Phat\rbrack}}{2}}
+			Fairness Index=\sqrt{\frac{{\lbrack P(P_1)-\bar{P}\rbrack}^{2}+{\lbrack P(P_2)-\bar{P}\rbrack}^{2}}{2}}
 		\end{align*}
-
-		
+		where $\bar{P}=\frac{P(P_1)+P(P_2)}{2}$ is the mean death probability. \\[4pt]
+		When the game is fair, all probabilities are equal, so the standard deviation is 0. The higher the index, the more unfair the game.\\[4pt]
+		For our $C=6$ examples:\\[63pt]
+		\begin{table}[h]
+			\centering
+			\caption{Fairness Index with Interpretation on different bullets}
+			\begin{tabular}{ccc}
+				\toprule
+				Bullets & Fairness Index & Interpretation \\
+				\midrule
+				1 & $0.000$ & Perfectly fair \\
+				2 & $0.033$ & Slight unfairness \\
+				3 & $0.100$ & Moderate unfairness \\
+				4 & $0.200$ & High unfairness \\
+				5 & $0.333$ & Extreme unfairness \\
+				\bottomrule
+			\end{tabular}
+		\end{table}\\This quantitative measure helps us compare different game configurations objectively.
 	\end{adjustwidth}
 	
-	\subsubsection{Visualization}
+	\subsubsection{\textbf{Visualization}}
 	\textit{(Implemented by Zhang)}
 	
 	\subsection{Optimal Stopping Problem (e)}
