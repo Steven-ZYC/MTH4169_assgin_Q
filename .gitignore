@@ -49,6 +49,3 @@
 *.swp
 *.swo
 *.tmp
-
-# Final PDFs (compiled outputs)
-*.pdf
