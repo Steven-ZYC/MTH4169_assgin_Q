@@ -8,6 +8,18 @@
 \usepackage{enumitem}
 \usepackage{changepage}
 \usepackage{booktabs}    % 导言区：美化表格线
+\usepackage{fancyhdr}
+\usepackage[superscript]{cite}
+
+% ====== 页眉页脚 ======
+\pagestyle{fancy}
+\fancyhf{}  % 清空默认页眉页脚
+
+% 页眉显示标题
+\fancyhead[C]{\textbf{Position Advantage and Fairness in Russian Roulette}}
+
+% 页脚显示页码
+\fancyfoot[C]{\thepage}
 
 \begin{document}
 	
@@ -22,9 +34,10 @@
 		November 11, 2025}
 	
 	\maketitle
+	\thispagestyle{fancy} % first page 页眉页脚
 	
 	\begin{abstract}
-		This essay conducts research on the traditional version of Russian Roulette, in which a single bullet is put into a six-chamber revolver. Participants spin the barrel, pull the trigger, and the one who fires the bullet loses. We analyze various scenarios using Decision Theory and simulation methods to determine optimal strategies and fairness conditions.
+		This essay conducts research on the traditional version of Russian Roulette, in which a single bullet is put into a six-chamber revolver. Participants spin the barrel, pull the trigger, and the one who fires the bullet loses. We analyse various scenarios using Decision Theory and simulation methods to determine optimal strategies and fairness conditions.
 	\end{abstract}
 	
 	\section{Introduction to the Chosen Topic}
@@ -52,42 +65,73 @@
 	Sections 3.1, 3.2, and 3.3 present decision problems under uncertainty. Decision Theory includes making rational choices when outcomes are probabilistic. The participant evaluates available actions (e.g., spin or not to spin) by calculating the probability of each result, then selects the action that has the lowest death probability, This transforms the game from pure chance into strategic choice. 
 	
 	\subsection{Systematic Probability Analysis}
-	We systematically analyze how parameters (chambers, bullets, players) affect death probabilities. Rather than making decisions, we calculate the exact probabilities in multiple scenarios to discover the general patterns and derive a fairness theorem. We also define fairness as equal death probability for all players regardless of position. 
+	We systematically analyse how parameters (chambers, bullets, players) affect death probabilities. Rather than making decisions, we calculate the exact probabilities in multiple scenarios to discover the general patterns and derive a fairness theorem. We also define fairness as equal death probability for all players regardless of position. 
 	
 	\subsection{Validation through Simulation}
 	In order to support the analysis, we use Monte Carlo simulations in Python to verify analytical results. By the law of Large Numbers, simulation results converge to theoretical probabilities as trial count increases, providing empirical validation of our formulas. 
 	
 	\section{Scenario Analysis (Simple to Complex)}
-	In scenario a, b, and c (sections 3.1-3.3), the game continues indefinitely with players alternating turns until someone dies, with barrel spinning between each shot if they choose. In scenarios d and e (sections 3.4-3.5), we analyze a different variant: each player takes exactly ONE shot in sequence, and the game ends after m shots (or when someone dies, whichever comes first). This variant allows us to analyze position advantage and fairness more systematically. We note that in this variant, there is a probability that all players survive (when the bullet is in a chamber that no player reaches).
+	In scenario a, b, and c (sections 3.1-3.3), the game continues indefinitely with players alternating turns until someone dies, with barrel spinning between each shot if they choose. In scenarios d and e (sections 3.4-3.5), we analyse a different variant: each player takes exactly ONE shot in sequence, and the game ends after m shots (or when someone dies, whichever comes first). This variant allows us to analyse position advantage and fairness more systematically. We note that in this variant, there is a probability that all players survive (when the bullet is in a chamber that no player reaches).
 	
-	\subsection{Traditional with Spinning (a)}
+	\subsection{\textbf{Traditional with Spinning (a)}}
 	This is quite different from the original playing method of Russian Roulette, which adds the condition of ``spinning the barrel after every trigger pull''. Will you choose to be the first or the second player? And what is the probability of loss?
 	
 	For the answer, as each time the barrel spins after every trigger pull, it is independent. Assume that the probability of loss for the first player is $\mathbb{P}$, and $1 - \mathbb{P}$ for the second player.
 	
-	\begin{equation}
+	\begin{equation*}
 		\mathbb{P} = \frac{1}{6} \times 1 + \frac{5}{6} \times (1 - \mathbb{P}) \Rightarrow \mathbb{P} = \frac{6}{11}
-	\end{equation}
+	\end{equation*}
 	
 	Therefore, the probability of loss for the player who goes first is $\tfrac{6}{11}$ and $\tfrac{5}{11}$ for who goes second.
 	
 	Obviously, you should choose to go second.
 	
 	
-	\subsection{Two Random Bullets (b)}
-	Compared to the original version, this time there are two bullets in the total of six chambers instead of one. This time we do not choose to go first or second. Your opponent played the first and he was alive after the first trigger pull. You are given the decision whether to spin the barrel (Zhou, 2008). Should you spin the barrel?
+	\subsection{\textbf{Two Random Bullets (b)}}
+	Compared to the original version, this time there are two bullets in the total of six chambers instead of one. This time we do not choose to go first or second. Your opponent played the first and he was alive after the first trigger pull. You are given the decision whether to spin the barrel~\cite{zhou2008}. Should you spin the barrel?
 	The answer is to spin the barrel. It is quite simple. If you do not spin the barrel, you will have a probability of $\tfrac{2}{5}$ of loss because your opponent has survived, which leaves five chambers with two bullets. If you spin the barrel, you will have a probability of $\tfrac{2}{6}$ of loss, like a reset, that everything goes 
 	
+	This example shows that, even with the same physical setting (six chambers and two bullets), the choice of action (spin or not) can dramatically change a player's risk after new information (the opponent's survival) is revealed. 
+	In Section~3.4 we move to a more systematic one-shot model to study how position and parameters $(C,n)$ affect each player's death probability.
 	
-	\subsection{Two Consecutive Bullets (c)}
+	
+	\subsection{\textbf{Two Consecutive Bullets (c)}}
 	Based on the two random bullet scenarios, we have added a new condition that the two bullets are randomly put in two consecutive positions. Thus, if your opponent survived his first round, should you spin the barrel~\cite{zhou2008}?
 	
 	Listing all the positions that the bullets can appear before proceeding. There are only six possible situations: (1,2), (2,3), (3,4), (4,5), (5,6), (6,1), where the numbers from 1 to 6 each represent a position of the chamber.
 	
 	According to the question, we know that the first chamber is empty, which means the possible positions of (1,2) and (6,1) do not apply. The probability of loss will be $\tfrac{1}{4}$ if not spinning the barrel, because from the remaining possible situations, only (2,3) applies that the second shot has a bullet. If spinning the barrel, it means everything resets, and the probability of loss will be $\tfrac{1}{3}$ because there are two out of six possible situations: (1,2) and (6,1), where the first shot is with a bullet.
 	
+	Therefore, in this consecutive-bullet setting with six chambers and two bullets, a rational player should \textbf{not} spin the barrel after the opponent survives the first shot, because
+	\[
+	\mathbb{P}(\text{lose} \mid \text{no spin}) = \tfrac{1}{4} 
+	\quad < \quad 
+	\mathbb{P}(\text{lose} \mid \text{spin}) = \tfrac{1}{3}.
+	\]
 	
-	\subsection{N Chambers, n Bullets, m People (d)}
+	This seemingly paradoxical difference can be further explained as follows. 
+	This contrasting result can also be understood through a \textbf{Markov-chain perspective} combined with the intuition of the \textbf{Monty Hall problem} that we studied in class. 
+	In scenario (b), each shot is independent---spinning the barrel simply resets the process, keeping the risk constant. 
+	But in scenario (c), once the first chamber is confirmed empty, that information is \textit{not meaningless}: it changes the conditional probability of the next chamber, just like how the host’s reveal in the Monty Hall problem reshapes the winning odds. 
+	
+	In the next subsection (Section~3.4), we formalise this idea in a more general one-shot, no-spin model with $C$ chambers, $n$ bullets and $m$ players. 
+	There we derive a closed-form expression for the death probability of an arbitrary Player~$i$ (Eq.~\eqref{eq:player-i}), which captures how the survival of earlier players and the remaining number of safe chambers jointly affect the risk faced by later players.
+	Scenario~(c) can then be viewed as a special case of this general framework, where conditioning on an empty first chamber effectively changes the underlying bullet distribution.
+	
+%	Before turning to the detailed derivation and proofs, Figure~\ref{fig:advantage-map} provides a preview of these general results by plotting the two-player advantage
+%	$\Delta(C,n) = p_1 - p_2$ over different $(C,n)$ settings in the one-shot model. 
+%	Here positive values indicate that the second player has a lower death probability than the first one; the numerical values are obtained using the general formula in Eq.~\eqref{eq:player-i} together with Monte Carlo validation (see the Simulation section for details).
+	
+	
+%	\begin{figure}[t]
+%		\centering
+%		\includegraphics[width=\columnwidth]{src/img/fig1_advantage_heatmap.png}
+%		\caption{Two-player advantage map $\Delta(C,n)=p_1-p_2$ under the “consecutive bullets” constraint. Positive values indicate a survival edge for the second player when choosing not to spin after observing an empty first chamber.}
+%		\label{fig:advantage-map}
+%	\end{figure}
+	
+	
+	\subsection{\textbf{N Chambers, n Bullets, m People (d)}}
 	Besides merely sticking on 6 chambers, 1 bullet, and 2 people games, we are going to explore more about this game with more variants, focusing on the position advantage and fairness. Changing the number of chambers, bullets, or participants may each has great impact to the game, so how do we decide in more complex situations in a rational way is what we are going to explore. \\[4pt]
 	
 	\subsubsection{\textbf{Building from the Ground Up: The Base Case}}
@@ -159,7 +203,7 @@
 	
 	The process in which chambers vary can be seen from the appendix.
 	
-	It is worth noting that the sum of $\mathbb{P}(\text{Player 1 dies})$ and $\mathbb{P}(\text{Player 2 dies})$ does not equal $1$. This is because, in this game variant, there is a probability that both players survive. For example, with $C = 6$, there is a $\tfrac{2}{3}$ probability that the bullet remains in chambers 3--6, meaning both players survive their single shot. This distinguishes our analysis from the traditional ``play until someone dies'' variant analyzed in Section~3.1.
+	It is worth noting that the sum of $\mathbb{P}(\text{Player 1 dies})$ and $\mathbb{P}(\text{Player 2 dies})$ does not equal $1$. This is because, in this game variant, there is a probability that both players survive. For example, with $C = 6$, there is a $\tfrac{2}{3}$ probability that the bullet remains in chambers 3--6, meaning both players survive their single shot. This distinguishes our analysis from the traditional ``play until someone dies'' variant analysed in Section~3.1.
 	
 	\subsubsection{\textbf{Adding More Bullets}}
 	Now the game becomes unfair where there are 6 chambers, 2 bullets, and 2 people:\\
@@ -258,6 +302,7 @@
 		\end{align*}
 		
 		Player 1 faces n bullets among C total chambers, quite straightforward. \\[4pt]
+		
 		\textbf{For Player 2:}
 		
 		Player 2 can only take their turn if Player 1 survives. After Player 1's shot.
@@ -266,9 +311,37 @@
 			\item C - 1 chambers remain
 			\item n bullets remain
 		\end{itemize}
-		\begin{align*}
-			\mathbb{P}(\text{Player 2 dies})=\mathbb{P}(\text{Player 1 survives}) \times \mathbb{P}(\text{Player 2 hit bullets} \mid \text{Player 1 survived})=\frac{C-n}{C} \times \frac{n}{C-1}
-		\end{align*}
+		
+		\begin{equation*}
+			\begin{split}
+				\mathbb{P}\!\bigl(\text{Player 2 dies}\bigr)
+				&= \mathbb{P}\!\bigl(\text{Player 1 survives}\bigr)\\
+				&\quad\times \mathbb{P}\!\bigl(\text{Player 2 hits bullet}\mid \text{Player 1 survived}\bigr)\\
+				&= \frac{C-n}{C} \times \frac{n}{C-1}.
+			\end{split}
+		\end{equation*}\\[4pt]
+		
+		To visualise how this two-player position advantage behaves across different parameter settings, 
+		we plot the quantity
+		\[
+		\Delta(C,n) = \mathbb{P}(\text{P1 dies}) - \mathbb{P}(\text{P2 dies})
+		\]
+		computed from the closed-form expressions above and cross-checked by Monte Carlo simulation
+		(see Section~4 for implementation details).
+		As shown in Figure~\ref{fig:advantage-map}, almost all configurations with $n \ge 2$ fall into the region
+		$\Delta(C,n) > 0$, which is fully consistent with our analytical result that Player~2 is always safer than
+		Player~1 whenever there is more than one bullet.
+		
+		\begin{figure}[ht]
+			\centering
+			\includegraphics[width=\columnwidth]{src/img/fig1_advantage_heatmap.png}
+			\caption{Two-player advantage map $\Delta(C,n)=\mathbb{P}(\text{P1 dies})-\mathbb{P}(\text{P2 dies})$
+				in the one-shot, no-spin model with $C$ chambers and $n$ bullets.
+				Warmer colours correspond to larger $\Delta(C,n)$ (Player~1 more likely to die),
+				while $\Delta(C,n)=0$ indicates a perfectly fair game.}
+			\label{fig:advantage-map}
+		\end{figure}
+		
 		\textbf{For Player 3:}
 		
 		Player 3 can only take their turn if both Player 1 and 2 survive. After their shots:
@@ -277,9 +350,16 @@
 			\item C - 2 chambers remain
 			\item n bullets remain
 		\end{itemize}
-		\begin{align*}
-			\mathbb{P}(\text{Player 3 dies})=\mathbb{P}(\text{Both P1 and P2 survive}) \times\mathbb{P}(\text{P3 hits bullet}\mid\text{both survived}) = \frac{C-n}{C}\times\frac{C-n-1}{C-1}\times\frac{n}{C-2} 
-		\end{align*}
+		
+		\begin{equation*}
+			\begin{split}
+				\mathbb{P}\!\bigl(\text{Player 3 dies}\bigr)
+				&= \mathbb{P}\!\bigl(\text{Both P1 and P2 survive}\bigr)\\
+				&\quad\times \mathbb{P}\!\bigl(\text{P3 hits bullet}\mid \text{both survived}\bigr)\\
+				&= \frac{C-n}{C}\times\frac{C-n-1}{C-1}\times\frac{n}{C-2}.
+			\end{split}
+		\end{equation*}\\[4pt]
+		
 		\textbf{For Player i (General Case):}
 		
 		Before Player i's turn:
@@ -293,32 +373,39 @@
 		The general formula is:
 		\begin{align}
 			\mathbb{P}(\text{Player \textit{i} dies})=\lbrack\prod_{j=1}^{i-1} \frac{C-j+1-n}{C-j+1}\rbrack \times \frac{n}{C-i+1}
+			\label{eq:player-i}
 		\end{align}
 		Expanded form:
-		\begin{align*}
-			\mathbb{P}(\text{Player \textit{i} dies})
-			&= \frac{C-n}{C}\times\frac{C-1-n}{C-1} \times\frac{C-2-n}{C-2}\times\dots\times\frac{C-i+2-n}{C-i+2}\times\frac{n}{C-i+1}\\
-		\end{align*}
+		\begin{equation*}
+			\begin{split}
+				\mathbb{P}(\text{Player \textit{i} dies})
+				&= \frac{C-n}{C}\times\frac{C-1-n}{C-1}\times\frac{C-2-n}{C-2}\times \cdots\\
+				&\quad\times\frac{C-i+2-n}{C-i+2}\times\frac{n}{C-i+1}
+			\end{split}
+		\end{equation*}
 		Where: 
 		\begin{itemize}
 			\item The first $i-1$ terms represent the probability that all previous players survive
 			\item The last term is the probability that Player i hits a bullet\\
 		\end{itemize}
+		
 		\textbf{The Special Case: $n=1$ (Single bullet)}
-		
 		When there is exactly one bullet, something surprises. Let's substitute n = 1 into the general formula:
-		\begin{align*}
-			\mathbb{P}(\text{Player \textit{i} dies})
-			&= \frac{C-1}{C}\times\frac{C-2}{C-1}\times\frac{C-3}{C-2}\times\dots\times\frac{C-\textit{i}+1}{C-\textit{i}+2}\times\frac{1}{C-\textit{i}+1}
-		\end{align*}
+		\begin{equation*}
+			\begin{split}
+				\mathbb{P}(\text{Player \textit{i} dies})
+				&= \frac{C-1}{C}\times\frac{C-2}{C-1}\times\frac{C-3}{C-2}\times\dots\\
+				&\quad\times\frac{C-\textit{i}+1}{C-\textit{i}+2}\times\frac{1}{C-\textit{i}+1}
+			\end{split}
+		\end{equation*}
 		
-		This is a \textbf{telescoping product}. Let's write out the full equation:
+		This is a \textbf{telescoping product}. Writing out the terms explicitly, the right-hand side of this equation can be expanded as follows:
 		\begin{align*}
-			=\frac{(C-1)\times(C-2)\times(C-3)\times\dots\times(C-\textit{i}+1)\times1}{C\times(C-1)\times(C-2)\times\dots\times(C-\textit{i}+2)\times(C-\textit{i}+1)}
+			\frac{(C-1)\times(C-2)\times(C-3)\times\dots\times(C-\textit{i}+1)\times1}{C\times(C-1)\times(C-2)\times\dots\times(C-\textit{i}+2)\times(C-\textit{i}+1)}
 		\end{align*}
 		After all cancellations:
 		\begin{align*}
-			=\frac{1}{C}
+			\frac{1}{C}
 		\end{align*}
 		
 		\textbf{Key Discovery:} When $n = 1$, every player has the exact same death probability of $\frac{1}{C}$, regardless of their position $i$!\\[2pt]
@@ -328,9 +415,10 @@
 			\item $C=3$, $n=1$: All players have probability $\frac{1}{3}$
 			\item $C=6$, $n=1$: All players have probability $\frac{1}{6}$\\
 		\end{itemize}
+		
 		\textbf{Applying the Formula to a New Scenario}
 		
-		We can now calculate probabilities for configurations we have not analyzed before.\\[4pt]
+		We can now calculate probabilities for configurations we have not analysed before.\\[4pt]
 		\textbf{Consider C = 10 chambers, n = 3 bullets, m = 3 players}\\[2pt]
 		Player 1: 
 		\begin{align*}
@@ -360,18 +448,25 @@
 		A Russian Roulette game is \textbf{fair} if and only if all players have equal death probability, regardless of their position in the turn order. 
 		Mathematically, for a game with m players: 
 		
-		\begin{align*}
-			\text{Fair} \Longleftrightarrow \mathbb{P}(\text{Player 1 dies}) = \mathbb{P}(\text{Player 2 dies}) = ... = \mathbb{P}(\text{Player m dies})
-		\end{align*}
+		\begin{equation*}
+			\begin{split}
+				\text{Fair} \Longleftrightarrow 
+				&\;\mathbb{P}(\text{Player 1 dies}) 
+				= \mathbb{P}(\text{Player 2 dies}) = \dots\\
+				&= \mathbb{P}(\text{Player m dies})
+			\end{split}
+		\end{equation*}\\[4pt]
+		
+		
 		\textbf{Equation To Be Implemented} 
 		
 		This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn. \\[4pt]
 		\textbf{The Fairness Theorem}
 		
-		Based on our systematic explorations above, we can now state our main throretical result. \\[4pt]
+		Based on our systematic explorations above, we can now state our main theoretical result. \\[4pt]
 		\textbf{Theorem (Fairness Condition)}
 		
-		For a Russioan Roulette game with C chambers, n bullets, and m players (where $m \le C$ and $n \le C$), the game is fair if and only if $n=1$ \\
+		For a Russian Roulette game with C chambers, n bullets, and m players (where $m \le C$ and $n \le C$), the game is fair if and only if $n=1$ \\
 		This theorem has two parts we must prove:
 		\begin{itemize}
 			\item \textbf{If $n=1$, then the game is fair} (Sufficiency)
@@ -382,11 +477,15 @@
 		
 		We already derived in previous sections that when $n=1$, the general formula simplifies through telescoping:
 		
-		\begin{align*}
-			\mathbb{P}(\text{Player } i \text{ dies}) 
-			&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \frac{C-3}{C-2} \times\dots\times\frac{C-(i-1)}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[6pt]
-			&= \frac{1}{C}
-		\end{align*}
+		\begin{equation*}
+			\begin{split}
+				\mathbb{P}(\text{Player } i \text{ dies})
+				&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \frac{C-3}{C-2} \times \dots\\
+				&\quad\times \frac{C-(i-1)}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[4pt]
+				&= \frac{1}{C}
+			\end{split}
+		\end{equation*}
+		
 		
 		Since this is \textbf{independent of $i$}, all players have equal probability $\tfrac{1}{C}$ when $n = 1$.
 		Therefore, if $n = 1$, then $\mathbb{P}$(\text{Player } i \text{ dies}) = $\tfrac{1}{C}$ for all $i$, which means the game is fair. \\[4pt]
@@ -414,7 +513,7 @@
 			n = 1
 		\end{align*}
 		
-		This shows that \textbf{if} Player 1 and Player 2 have equal death probabiilty, \textbf{then} n must equal 1. 
+		This shows that \textbf{if} Player 1 and Player 2 have equal death probability, \textbf{then} n must equal 1. 
 		Thus, if $n \neq 1$ or if $n \geq 2$, then $\mathbb{P}(\text{Player 1 dies}) \neq\mathbb{P}(\text{Player 2 dies})$, meaning the game is unfair. So, the game is fair if and only if  $n=1$.\\[4pt]
 		\textbf{Which Player Has the Advantage When $n \geq 2$? }
 		
@@ -461,7 +560,7 @@
 			\frac{n}{C-1} < \frac{n}{C} \text{ for all } n \geq 1 \text{,} C \geq 2.
 		\end{align*}
 		
-		However, Player 2 only reaches their turn if Player 1 survives, which happens with probability $\frac{C-n}{C}$. The combined effect still favors Player 2 when $n \geq 2$.\\[4pt]
+		However, Player 2 only reaches their turn if Player 1 survives, which happens with probability $\frac{C-n}{C}$. The combined effect still favours Player 2 when $n \geq 2$.\\[4pt]
 		\textbf{Insights: Practical Decision-Making}
 		
 		If forced to play Russian Roulette with $n \geq 2$ bullets, rational players should prefer later positions. With $n = 5$ bullets in a 6-chamber gun, Player 2's death probability $\frac{1}{6}$ is dramatically better than Player 1's $\frac{5}{6}$.\\[4pt]
@@ -471,9 +570,9 @@
 		\textbf{Measuring Unfairness: The Fairness Index}
 		
 		To quantify how unfair a game is, we can define a \textbf{fairness} index as the standard deviation of death probabilities across all players. For two players:
-		\begin{align*}
+		\begin{align}
 			\text{Fairness Index}=\sqrt{\frac{{\lbrack \mathbb{P}(P_1)-\bar{\mathbb{P}}\rbrack}^{2}+{\lbrack \mathbb{\mathbb{P}}(P_2)-\bar{\mathbb{P}}\rbrack}^{2}}{2}}
-		\end{align*}
+		\end{align}
 		where $\bar{\mathbb{P}}=\frac{\mathbb{P}(P_1)+\mathbb{P}(P_2)}{2}$ is the mean death probability. \\[4pt]
 		
 		When the game is fair, all probabilities are equal, so the standard deviation is 0. The higher the index, the more unfair the game.\\
@@ -502,7 +601,7 @@
 	\subsubsection{Background and Scenario}
 	
 	\begin{adjustwidth}{2em}{0pt}
-		In this part, we will be analyzing the optimal stopping problem, to find out when will be the best point to stop when we play in Russian Roulette that involve values for win/forfeit/lose. On the other word, \textbf{WHEN should you quit to avoid lose?} To find this out in a more interesting way, we implement a background for the game as follows: \textbf{\textit{The Prisoner's Tournament}}. Two prisoners are offered a chance at freedom through a Russian Roulette tournament with the following rules:\\[4pt]
+		In this part, we will be analysing the optimal stopping problem, to find out when will be the best point to stop when we play in Russian Roulette that involve values for win/forfeit/lose. On the other word, \textbf{WHEN should you quit to avoid lose?} To find this out in a more interesting way, we implement a background for the game as follows: \textbf{\textit{The Prisoner's Tournament}}. Two prisoners are offered a chance at freedom through a Russian Roulette tournament with the following rules:\\[4pt]
 		\textbf{Setup}
 		\begin{itemize}
 			\item One revolver with C chambers and n bullets
@@ -537,159 +636,358 @@
 		
 	\end{adjustwidth}
 	
-	\subsubsection{Calculations}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		To start with, we will calculate the death probability: 
-		\begin{itemize}
-			\item After round 1:\\$\mathbb{P}(\text{death})=\frac{n}{C-2}>\frac{n}{C}$
-			\item After round k:\\$\mathbb{P}(\text{death})=\frac{n}{C-2k}$ keeps increasing\\
-		\end{itemize}
-		With the example of (C = 10, n = 2):
-		\begin{itemize}
-			\item Round 1: $\mathbb{P}(\text{you die})=\frac{2}{10}=0.20$
-			\item Round 2: $\mathbb{P}(\text{you die})=\frac{2}{8}=0.25$
-			\item Round 3: $\mathbb{P}(\text{you die})=\frac{2}{6}=0.33$
-			\item Round 4: $\mathbb{P}(\text{you die})=\frac{2}{4}=0.50$
-			\item Round 5: $\mathbb{P}(\text{you die})=\frac{2}{2}=1.00$ (Must die)
-		\end{itemize}
+		\subsubsection{Calculations}
 		
-		In round 5, we can find out that there will be a promised died if we keep running the game. Thus, the death probability becomes so high that expected utility turns negative, making forfeiture optimal. \\[4pt]
-		Before round k, we have:
-		\begin{itemize}
-			\item Chambers remaining: $C-2(k-1)=C-2k+2$
-			\item Bullets remaining $n$
-			\item Empty chambers confirmed: $2k-2$
-		\end{itemize}
-		
-		If we continue round K, three possible outcomes may occur: 
-		\begin{enumerate}
-			\item Probability of you die in round K:\\$\mathbb{P}(\text{you die in round k})=\frac{n}{C-2k+2}$\\
-			\item Probability of you surviving but opponent dies in:\\$\mathbb{P}(\text{you win in round k}=\frac{C-2k+2-n}{C-2k+2})\times\frac{n}{C-2k+1}$\\
-			\item Both survived (game continues):\\$\mathbb{P}(\text{both survive})=\frac{C-2k+2-n}{C-2k+2}\times\frac{C-2k+1-n}{C-2k+1}$\\
-		\end{enumerate}
-		
-		To find the Expected Utility Calculations to quantify an expectation on utility, we:
-		Let $V_k$ = Expected Utility of continuing from Round k onward (before taking your shot in Round k)
-		\begin{align*}
-			V_k=\mathbb{P}(die)\times U_{death}+\mathbb{P}(win)_k\times U_{win}+\mathbb{P}(\textit{both survive})_k\times V_{k+1}
-			=\frac{n}{C-2k+2}\times(-1)+\frac{C-2k+2-n}{C-2k+2}\times\frac{n}{C-2k+1}\times(10)+\frac{C-2k+2-n}{C-2k+2}\times{C-2k+1-n}{C-2k+1}\times V_{k+1}
-		\end{align*}
-		
-		Terminal condition: When $C-2k+2=n$ (only $n$ chambers left, all with bullets), you must be died in the coming round if it is your turn, which can be recognized as: 
-		\begin{align*}
-			V_k=-1
-		\end{align*}
-		
-		Therefore, if:
-		$V_k>0$, we can continue to round k, which means positive utility is still expected
-		$V_k<0$, we should forfeit before round k as a negative utility is going to happen\\
-		
-		Thus, the Optimal Stopping Condition will be:
-		\begin{align*}
-			k^*=max\{k:V_k>0\}
-		\end{align*}
-		
-		Continue through round $k^*$, so forfeit before round $k^*+1$. So, the maximum possible rounds will be:
-		\begin{align*}
-			k_{max}=\lfloor \frac{C}{2}\rfloor \text{ such that } C-2k_{max}+2 \geq n
-		\end{align*}
-		
-		Now we will use some examples before going though a general result.
-		\begin{enumerate}
-			\item Example 1:\\[4pt]$C=6$ chambers, $n=1$ bullet\\[4pt]Round 3 (terminal round): 2 chambers, 1 bullet
+		\begin{adjustwidth}{2em}{0pt}
+			To start with, we will calculate the death probability: 
+			\begin{itemize}
+				\item After round 1:\\$\mathbb{P}(\text{death})=\frac{n}{C-2}>\frac{n}{C}$
+				\item After round k:\\$\mathbb{P}(\text{death})=\frac{n}{C-2k}$ keeps increasing\\
+			\end{itemize}
+			With the example of (C = 10, n = 2):
+			\begin{itemize}
+				\item Round 1: $\mathbb{P}(\text{you die})=\frac{2}{10}=0.20$
+				\item Round 2: $\mathbb{P}(\text{you die})=\frac{2}{8}=0.25$
+				\item Round 3: $\mathbb{P}(\text{you die})=\frac{2}{6}=0.33$
+				\item Round 4: $\mathbb{P}(\text{you die})=\frac{2}{4}=0.50$
+				\item Round 5: $\mathbb{P}(\text{you die})=\frac{2}{2}=1.00$ (Must die)
+			\end{itemize}
+			
+			In round 5, we can find out that there will be a promised died if we keep running the game. Thus, the death probability becomes so high that expected utility turns negative, making forfeiture optimal. \\[4pt]
+			Before round k, we have:
+			\begin{itemize}
+				\item Chambers remaining: $C-2(k-1)=C-2k+2$
+				\item Bullets remaining $n$
+				\item Empty chambers confirmed: $2k-2$
+			\end{itemize}
+			
+			If we continue round K, three possible outcomes may occur: 
 			\begin{enumerate}
-				\item $\mathbb{P}(\text{you die})=\frac{1}{2}$
-				\item $\mathbb{P}(\text{you win})=\frac{1}{2}\times\frac{1}{1}=\frac{1}{2}$
-				\item $\mathbb{P}(\text{both survive})=0(\text{game must end})$\\
+				\item Probability of you die in round K:\\$\mathbb{P}(\text{you die in round k})=\frac{n}{C-2k+2}$\\
+				\item Probability of you surviving but opponent dies in:\\$\mathbb{P}(\text{you win in round k}=\frac{C-2k+2-n}{C-2k+2})\times\frac{n}{C-2k+1}$\\
+				\item Both survived (game continues):\\$\mathbb{P}(\text{both survive})=\frac{C-2k+2-n}{C-2k+2}\times\frac{C-2k+1-n}{C-2k+1}$\\
 			\end{enumerate}
-			$V_3=\frac{1}{12}\times (-1)+\frac{1}{12}\times (10)=0.5+5=4.5$\\
 			
-			Round 2: 4 chambers, 1 bullet\\
-			$V_2=4.5$\\[4pt]
-			Round 1: 6 chambers, 1 bullet\\
-			$V_1=4.5$
+			To find the Expected Utility Calculations to quantify an expectation on utility, we:
+			Let $V_k$ = Expected Utility of continuing from Round k onward (before taking your shot in Round k): \\[1pt]
+			
+			\begin{equation*}
+				\begin{split}
+					V_k
+					&= \mathbb{P}(\text{die}) \times U_{\text{death}}
+					+ \mathbb{P}(\text{win})_k \times U_{\text{win}}
+					+ \mathbb{P}(\textit{both survive})_k \times V_{k+1} \\[6pt]
+					&= \frac{n}{C-2k+2} \times (-1)
+					+ \frac{C-2k+2-n}{C-2k+2} \times \frac{n}{C-2k+1} \times 10\\[4pt]
+					&\quad
+					+ \frac{C-2k+2-n}{C-2k+2} 
+					\times \frac{C-2k+1-n}{C-2k+1} 
+					\times V_{k+1}
+				\end{split}
+			\end{equation*} \\[1pt]
+			
+			
+			Terminal condition: When $C-2k+2=n$ (only $n$ chambers left, all with bullets), you must be died in the coming round if it is your turn, which can be recognized as: 
 			\begin{align*}
-				V_1=V_2=V_3=4.5>0
+				V_k=-1
 			\end{align*}
 			
-			Therefore, the Optimal Strategy for 6 chambers and 1 bullet is to continue all the way (never forfeit).\\
-			\item Example 2:\\[4pt]$C=6$ chambers, $n=2$ bullets\\[4pt]Round 3 (Terminal Round): 2 chambers, 2 bullets
-			\begin{align*}
-				V_3=1\times (-1)=-1
-			\end{align*}
-			Round 2: 4 chambers, 2 bullets\\
-			$V_2=2.67$\\[4pt]
-			Round 1: 6 chambers, 2 bullets\\
-			$V_1=3.4$\\[4pt]
-			Result:\\
-			$V_3=3.4>0$, continue\\
-			$V_2=2.67>0$, continue\\
-			$V_1=-1<0$, forfeit\\
+			Therefore, if:
+			$V_k>0$, we can continue to round k, which means positive utility is still expected
+			$V_k<0$, we should forfeit before round k as a negative utility is going to happen\\
 			
-			Therefore, the Optimal Strategy for 6 chambers and 2 bullets is to continue playing in round 1 and 2, and forfeit before round 3.\\
-			\item General Results of an optimal stopping table:
+			Thus, the Optimal Stopping Condition will be:
+			\begin{align*}
+				k^*=max\{k:V_k>0\}
+			\end{align*}
+			
+			Continue through round $k^*$, so forfeit before round $k^*+1$. So, the maximum possible rounds will be:
+			\begin{align*}
+				k_{max}=\lfloor \frac{C}{2}\rfloor \text{ such that } C-2k_{max}+2 \geq n
+			\end{align*}
+			
+			Now we will use some examples before going though a general result.
+			\begin{enumerate}
+				\item Example 1:\\[4pt]$C=6$ chambers, $n=1$ bullet\\[4pt]Round 3 (terminal round): 2 chambers, 1 bullet
+				\begin{enumerate}
+					\item $\mathbb{P}(\text{you die})=\frac{1}{2}$
+					\item $\mathbb{P}(\text{you win})=\frac{1}{2}\times\frac{1}{1}=\frac{1}{2}$
+					\item $\mathbb{P}(\text{both survive})=0(\text{game must end})$\\
+				\end{enumerate}
+				$V_3=\frac{1}{12}\times (-1)+\frac{1}{12}\times (10)=0.5+5=4.5$\\
+				
+				Round 2: 4 chambers, 1 bullet\\
+				$V_2=4.5$\\[4pt]
+				Round 1: 6 chambers, 1 bullet\\
+				$V_1=4.5$
+				\begin{align*}
+					V_1=V_2=V_3=4.5>0
+				\end{align*}
+				
+				Therefore, the Optimal Strategy for 6 chambers and 1 bullet is to continue all the way (never forfeit).\\
+				\item Example 2:\\[4pt]$C=6$ chambers, $n=2$ bullets\\[4pt]Round 3 (Terminal Round): 2 chambers, 2 bullets
+				\begin{align*}
+					V_3=1\times (-1)=-1
+				\end{align*}
+				Round 2: 4 chambers, 2 bullets\\
+				$V_2=2.67$\\[4pt]
+				Round 1: 6 chambers, 2 bullets\\
+				$V_1=3.4$\\[4pt]
+				Result:\\
+				$V_3=3.4>0$, continue\\
+				$V_2=2.67>0$, continue\\
+				$V_1=-1<0$, forfeit\\
+				
+				Therefore, the Optimal Strategy for 6 chambers and 2 bullets is to continue playing in round 1 and 2, and forfeit before round 3.\\
+				\item General Results of an optimal stopping table:
+				\begin{table}[h]
+					\centering
+					\caption{Optimal Stopping Table}
+					\begin{tabular}{ccccccc}
+						\toprule
+						C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & Optimal Strategy \\
+						\midrule
+						6 & 1 & 4.50 & 4.50 & 4.50 & N.A. & Never forfeit\\
+						6 & 2 & 3.40 & 2.67 & -1 & N.A. & Forfeit before R3 \\
+						6 & 3 & 2.85 & 1.75 & N.A. & N.A. & Forfeit before R3 \\
+						8 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
+						8 & 2 & 3.87 & 3.54 & 2.67 & 1 & Forfeit before R4 \\
+						10 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
+						10 & 2 & 4.12 & 3.92 & 3.54 & 2.67 & Never forfeit\\
+						10 & 3 & 4.43 & 4.11 & 3.40 & 1.75 & Never forfeit\\
+						10 & 5 & 2.75 & 2.14 & 0.83 & N.A. & Forfeit before R3\\
+						\bottomrule
+					\end{tabular}
+				\end{table}
+			\end{enumerate}
+			
+		\end{adjustwidth}
+	
+		\subsubsection{Results}
+		
+		\begin{adjustwidth}{2em}{0pt}
+			
+			\textbf{The single bullet special case}
+			\begin{itemize}
+				\item When $n=1$, the expected utility $(V_k)$ will always be 4.5, which means you should NOT forfeit for any situation like this.
+				\item The increasing death probability is exactly offset by the decreasing game continuation probability.
+				\item This matches what we found from the previous discovery, which the game is fair if and only if $n=1$.\\
+			\end{itemize}
+			\textbf{Bullet density relationship}
+			
+			If it seems that, the calculation steps are complicated, taking a lot of time to determine the result to whether forfeit or not, is there a simpler way to do a brief prediction? Yes, there are. We find that there is a density ratio of $r=\frac{n}{c}$, when: 
+			\begin{itemize}
+				\item $r \leq0.2$, it is most likely optimal to continue all the rounds.
+				\item $0.2\leq r\leq0.4$, it is most likely optimal to forfeit before maximum round.
+				\item $r \leq0.4$, it is most likely optimal to forfeit early (after 1 or 2 rounds).\\
+			\end{itemize}
+			\textbf{Pattern of Expected Utility $V_k$}
+			\begin{itemize}
+				\item It usually starts high before the game
+				\item It gradually decreases on 1 point, and that is where we should stop
+			\end{itemize}
 			\begin{table}[h]
 				\centering
-				\caption{Optimal Stopping Table}
+				\caption{Supporting Example}
 				\begin{tabular}{ccccccc}
 					\toprule
 					C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & Optimal Strategy \\
 					\midrule
-					6 & 1 & 4.50 & 4.50 & 4.50 & N.A. & Never forfeit\\
-					6 & 2 & 3.40 & 2.67 & -1 & N.A. & Forfeit before R3 \\
-					6 & 3 & 2.85 & 1.75 & N.A. & N.A. & Forfeit before R3 \\
-					8 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
-					8 & 2 & 3.87 & 3.54 & 2.67 & 1 & Forfeit before R4 \\
-					10 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
-					10 & 2 & 4.12 & 3.92 & 3.54 & 2.67 & Never forfeit\\
-					10 & 3 & 4.43 & 4.11 & 3.40 & 1.75 & Never forfeit\\
-					10 & 5 & 2.75 & 2.14 & 0.83 & N.A. & Forfeit before R3\\
+					6 & 2 & 3.40 & 2.67 & -1 & N.A. & forfeit before R3\\
 					\bottomrule
 				\end{tabular}
 			\end{table}
-		\end{enumerate}
-		
-	\end{adjustwidth}
-	
-	\subsubsection{Results}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		
-		\textbf{The single bullet special case}
-		\begin{itemize}
-			\item When $n=1$, the expected utility $(V_k)$ will always be 4.5, which means you should NOT forfeit for any situation like this.
-			\item The increasing death probability is exactly offset by the decreasing game continuation probability.
-			\item This matches what we found from the previous discovery, which the game is fair if and only if $n=1$.\\
-		\end{itemize}
-		\textbf{Bullet density relationship}
-		
-		If it seems that, the calculation steps are complicated, taking a lot of time to determine the result to whether forfeit or not, is there a simpler way to do a brief prediction? Yes, there are. We find that there is a density ratio of $r=\frac{n}{c}$, when: 
-		\begin{itemize}
-			\item $r \leq0.2$, it is most likely optimal to continue all the rounds.
-			\item $0.2\leq r\leq0.4$, it is most likely optimal to forfeit before maximum round.
-			\item $r \leq0.4$, it is most likely optimal to forfeit early (after 1 or 2 rounds).\\
-		\end{itemize}
-		\textbf{Pattern of Expected Utility $V_k$}
-		\begin{itemize}
-			\item It usually starts high before the game
-			\item It gradually decreases on 1 point, and that is where we should stop
-		\end{itemize}
-		\begin{table}[h]
-			\centering
-			\caption{Supporting Example}
-			\begin{tabular}{ccccccc}
-				\toprule
-				C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & Optimal Strategy \\
-				\midrule
-				6 & 2 & 3.40 & 2.67 & -1 & N.A. & forfeit before R3\\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		
-	\end{adjustwidth}
+			
+		\end{adjustwidth}
 	
 	\section{Simulation}
+		\label{sec:simulation}
+		\subsection{Monte Carlo validation of analytic probabilities}
+		
+		In Section~3.4 we derived a closed-form expression for the death probability
+		of Player~$i$ in an $m$-player Russian Roulette game with $C$ chambers and
+		$n$ bullets under the one-shot, no-spin rule:
+		\[
+		\mathbb{P}(\text{Player } i \text{ dies})
+		= \Biggl[\prod_{j=1}^{i-1} \frac{C-j+1-n}{C-j+1}\Biggr]\times\frac{n}{C-i+1}.
+		\]
+		To check the correctness of this analytic result, we implemented a Monte Carlo
+		simulator that exactly follows the same game rules as our mathematical model.
+		
+		For a given configuration $(C,n,m)$, each simulated game proceeds as follows.
+		First, $n$ distinct chambers are sampled uniformly at random from
+		$\{1,\dots,C\}$ to represent the bullet positions. Then Players~$1$ to $m$
+		take turns firing exactly once at chambers $1$ to $m$ in order.  If a bullet
+		is encountered, that player is recorded as dead and the game ends; if no
+		bullet is encountered within the first $m$ chambers, the game ends with all
+		players surviving.  Repeating this procedure for $10^5$ independent games,
+		we estimate the empirical death probability $\hat{p}_i$ for each player $i$
+		as the proportion of runs in which Player~$i$ dies.
+		
+		Figure~\ref{fig:fig2_pi_compare} illustrates the result for a representative
+		setting with $C=6$ chambers, $n=2$ bullets and $m=3$ players, based on
+		$150{,}000$ simulated games. For each player index $i$ we plot the theoretical
+		probability $p_i$ given by the closed-form formula alongside the Monte Carlo
+		estimate $\hat{p}_i$. The two bars almost coincide for all three players, and
+		the tiny discrepancies are well within the sampling variability expected from
+		$150{,}000$ trials. This confirms that the simulation code faithfully implements
+		our model and that the analytic formula in Section~3.4 is numerically accurate
+		for this configuration (and similarly for other settings we tested, not shown).
+		
+		\begin{figure}[ht]
+			\centering
+			\includegraphics[width=0.9\columnwidth]{src/img/fig2_pi_compare.png}
+			\caption{Theoretical versus Monte Carlo death probabilities $p_i$
+				for a representative configuration $(C,n,m) = (6,2,3)$ under the
+				one-shot, no-spin model. Each pair of bars corresponds to one player
+				index $i$. The Monte Carlo estimates (orange) closely match the
+				analytic values (blue) based on $150{,}000$ simulated games.}
+			\label{fig:fig2_pi_compare}
+		\end{figure}
+		
+		\subsection{Fairness landscape via the fairness index}
+		
+		Section~3.4 introduced a quantitative fairness index $\Phi(C,n,m)$ defined
+		as the standard deviation of the death probabilities across all players.
+		For $m$ players with death probabilities $p_1,\dots,p_m$, we have
+		\[
+		\Phi(C,n,m)
+		=\sqrt{\frac{1}{m}\sum_{i=1}^{m}\bigl(p_i-\bar{p}\bigr)^2},
+		\qquad
+		\bar{p}=\frac{1}{m}\sum_{i=1}^{m}p_i.
+		\]
+		A perfectly fair game corresponds to $\Phi=0$, whereas larger values of
+		$\Phi$ indicate more severe positional advantage.
+		
+		Using the closed-form expression for $p_i$ derived in Section~3.4, our
+		Python code scans over a grid of parameter settings and computes
+		$\Phi(C,n,m)$ for each configuration.  For each triple $(C,n,m)$, we first
+		evaluate $p_1,\dots,p_m$ analytically using the formula above and then pass
+		these values to a helper routine that calculates the standard deviation.
+		The resulting fairness indices are stored in a 3D array indexed by
+		$(C,n,m)$.
+		
+		Figure~\ref{fig:fairness-heatmap} visualises a two-dimensional slice of
+		this landscape, focusing on the two-player case ($m=2$) and plotting
+		$\Phi(C,n,2)$ as a function of $(C,n)$.  Dark regions (near zero) correspond
+		to almost fair games, while brighter regions indicate strong positional
+		bias.  Consistent with our theoretical Fairness Theorem, the line $n=1$ is
+		perfectly dark because the game is exactly fair for any $C$ when there is
+		exactly one bullet.  As soon as $n\ge 2$, the fairness index becomes
+		strictly positive and grows with $n$, reflecting the increasing advantage
+		of later players that we already observed in Figure~\ref{fig:advantage-map}.
+		
+		\begin{figure}[ht]
+			\centering
+			\includegraphics[width=0.9\columnwidth]{src/img/fig3_phi_heatmap.png}
+			\caption{Fairness index $\Phi(C,n,2)$ for the two-player, one-shot,
+				no-spin game. Dark colours indicate nearly fair games
+				($\Phi\approx 0$), while brighter colours correspond to stronger
+				positional advantage. The line $n=1$ is perfectly fair for all $C$,
+				whereas configurations with $n\ge 2$ quickly become more and more
+				unfair, in line with the Fairness Theorem in Section~3.4.}
+			\label{fig:fairness-heatmap}
+		\end{figure}
+		
+		\subsection{Dynamic-programming numerics for the optimal stopping problem}
+		
+		In the final part of our analysis we reinterpret Russian Roulette as an
+		optimal stopping problem.  A rational player may choose to withdraw from
+		the game before their turn if the expected utility of continuing becomes
+		negative.  To model this behaviour, we use a dynamic-programming (DP)
+		recursion over the number of remaining rounds.
+		
+		Let $V_k$ denote the maximal expected utility for a player who is currently
+		about to face round $k$, assuming that there are $C$ chambers, $n$ bullets,
+		and that all earlier players have followed the same optimal rule.  We
+		normalise payoffs by assigning a positive utility $U_w>0$ to winning the
+		game (surviving until no bullets remain) and a negative utility $U_d<0$ to
+		death.  At each stage $k$, the player chooses between
+		\emph{stopping immediately}, which yields utility $0$, and
+		\emph{continuing to play}, which yields
+		\[
+		V_k^{\text{cont}}
+		= \mathbb{P}_k(\text{die})\,U_d
+		+ \mathbb{P}_k(\text{win})\,U_w
+		+ \mathbb{P}_k(\text{both survive})\,V_{k+1}.
+		\]
+		Here $\mathbb{P}_k(\cdot)$ denotes the appropriate probabilities
+		conditional on having reached round $k$, which we compute using the same
+		combinatorial reasoning as in Section~3.4.  The DP recursion is then
+		\[
+		V_k=\max\{0,V_k^{\text{cont}}\},
+		\]
+		with the terminal condition $V_{K+1}=0$ after the last possible round $K$.
+		Our Python implementation evaluates these probabilities symbolically,
+		builds the recursion from $k=K$ backwards to $k=1$, and records both the
+		values $V_k$ and the optimal decision (stop/continue) at each step.
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\columnwidth]{src/img/fig4_Vk_curve.png}
+			\caption{Dynamic-programming value functions $V_k$ for two representative
+				configurations of $(C,n)$ under fixed utilities $U_w$ and $U_d$.
+				The zero-crossing of each curve marks the optimal stopping threshold
+				$k^*$: for $k<k^*$ the player should continue, whereas for $k\ge k*$
+				the expected utility of staying becomes negative.}
+			\label{fig:Vk-curve}
+		\end{figure}
+		
+		Figure~\ref{fig:Vk-curve} shows a typical example of this DP behaviour for
+		two parameter choices.  For each game configuration we plot $V_k$ against
+		the round index $k$.  The point where the curve crosses zero identifies the
+		optimal stopping threshold $k^*$.  When $V_k$ is positive, the expected
+		benefit of staying in the game outweighs the risk of death; once $V_k$
+		drops below zero, optimal play recommends quitting.
+		
+		To understand how this stopping threshold depends on the physical game
+		parameters, we repeat the DP computation on a grid of $(C,n)$ values and
+		record the corresponding $k^*(C,n)$.  In Figure~\ref{fig:stopping-regions}
+		we visualise the resulting decision regions in the $(C,n)$ plane.  Each
+		grid cell is coloured according to the qualitative type of the optimal
+		policy (e.g.\ ``never stop'', ``stop only in late rounds'', or ``stop
+		early''), revealing clear structural patterns: as the number of bullets $n$
+		increases relative to the number of chambers $C$, the player should become
+		more conservative and prefer to withdraw earlier.
+		
+		Finally, Figure~\ref{fig:kstar-utilities} explores the sensitivity of the
+		optimal stopping rule to the utility parameters.  Fixing a representative
+		game configuration $(C,n)$, we vary $(U_w,U_d)$ over a range of plausible
+		values and recompute $k^*$ for each pair.  The resulting plot traces how
+		the optimal stopping threshold shifts when the player becomes more
+		risk-averse (more negative $U_d$) or places less value on winning (smaller
+		$U_w$).  As expected, when death is penalised more heavily or survival is
+		less rewarding, the optimal strategy moves towards stopping earlier.
+		Although these figures are generated numerically, they are directly driven
+		by the DP equations above and thus serve as a visual summary of the
+		underlying mathematical reasoning.
+		
+		
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.8\columnwidth]{src/img/fig5_stopping_regions.png}
+			\caption{Optimal stopping regions in the $(C,n)$ plane obtained from the
+				dynamic-programming recursion.  Each cell represents one configuration
+				of chambers $C$ and bullets $n$, coloured by the qualitative type of the
+				optimal policy (e.g.\ never stop, stop in late rounds, stop early).  As
+				the bullet-to-chamber ratio increases, the optimal strategy shifts from
+				aggressive to conservative.}
+			\label{fig:stopping-regions}
+		\end{figure}
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.8\columnwidth]{src/img/fig6_kstar_trajectories.png}
+			\caption{Sensitivity of the optimal stopping threshold $k^*$ to the
+				utility parameters $(U_w,U_d)$ for a fixed game configuration $(C,n)$.
+				Each point corresponds to one pair of utilities, with its vertical
+				position indicating the resulting $k^*$.  More negative death utility
+				or smaller winning utility pushes the optimal stopping point to earlier
+				rounds, reflecting increased risk aversion.}
+			\label{fig:kstar-utilities}
+		\end{figure}
+		
 	
 	\section*{}
 	\begin{thebibliography}{9}
@@ -697,709 +995,34 @@
 		\bibitem{sternstein2024} M. Sternstein, \textit{AP Statistics Premium, 2025}, Kaplan North America, LLC, 2024.
 	\end{thebibliography}
 	
+	
+	
 	\section*{Appendix}
 	
-\end{document}\documentclass[conference]{IEEEtran}
+	\subsection*{Code and reproducibility}
+	
+	All simulation and visualisation code used in this project is available in our public GitHub repository:\footnote{Accessed in November 2025.}
+	\begin{center}
+		\href{https://github.com/Steven-ZYC/MTH4169_assgin_Q}{https://github.com/Steven-ZYC/MTH4169\_assgin\_Q}
+	\end{center}
+	
+	The repository contains the Python scripts that:
+	\begin{itemize}
+		\item run Monte Carlo simulations for the Russian Roulette scenarios;
+		\item implement the dynamic programming procedure for the optimal stopping problem;
+		\item generate all figures reported in the main text.
+	\end{itemize}
 
-% ====== Packages ======
-\usepackage{amsmath,amssymb,amsfonts,graphicx,booktabs}
-\usepackage{newtxtext,newtxmath}
-\usepackage{multirow}
-\usepackage{hyperref}
-\usepackage{enumitem}
-\usepackage{changepage}
-\usepackage{booktabs}    % 导言区：美化表格线
-
-\begin{document}
 	
-	% ====== Title ======
-	\title{Position Advantage and Fairness in Russian Roulette:\\A Decision-Theoretic Analysis of Survival Strategies}
+	\subsection*{Directory structure}
 	
-	\author{Zihao Huang (11533765)  Lam Chun Kit (11540512)  Yancheng Zhang (11537668) \\
-		Department of Mathematics and Information Technology\\
-		The Education University of Hong Kong\\
-		MTH4169: Introduction to Probability and Statistics\\
-		Professor Zhang Junyi\\
-		November 11, 2025}
+	For clarity, we briefly summarise the directory structure relevant to this report:
+	\begin{itemize}
+		\item \texttt{/} — main \LaTeX{} files for the report.
+		\item \texttt{src/} — project-specific Python source files, including Monte Carlo simulators, decision-theoretic utilities, and plotting scripts.
+		\item \texttt{src/img/} — all figure files used in the paper.
+		\item \texttt{src/logs/} — log files produced when running the Python simulation code.
+	\end{itemize}
 	
-	\maketitle
-	
-	\begin{abstract}
-		This essay conducts research on the traditional version of Russian Roulette, in which a single bullet is put into a six-chamber revolver. Participants spin the barrel, pull the trigger, and the one who fires the bullet loses. We analyze various scenarios using Decision Theory and simulation methods to determine optimal strategies and fairness conditions.
-	\end{abstract}
-	
-	\section{Introduction to the Chosen Topic}
-	This essay will conduct research on the traditional version of Russian Roulette, in which a single bullet is put into a six-chamber revolver, and the participants will spin the barrel, then pull the trigger, and the one who shoots out the bullet loses. The conditions are: if you, one of the players, can choose to go first or second, how will you choose? And what is your probability of loss~\cite{zhou2008}? 
-	
-	Besides, we want to find out the probability (2 people shared a gun) of:
-	\begin{enumerate}[label=\alph*)]
-		\item Spinning the barrel after every trigger pull.
-		\item Two bullets are randomly put in the chamber.
-		\item Two bullets are randomly put in two consecutive positions.
-	\end{enumerate}
-	
-	$\mathbb{P}$
-	
-	The best situation is if:
-	\begin{enumerate}[label=\alph*), resume]
-		\item There are $N$ chambers with $n$ bullets. How should we decide whether to trigger once only or consecutively trigger twice to $N$ times? What if there are more than two people to participate in it?
-		\item If we decide to trigger more than once, when will be the best time to quit it?
-	\end{enumerate}
-	
-	By using Decision Theory, Simulations (Python built-in), and other related statistical methods, the essay aims to find out the best strategies when we face the scenarios as listed above.
-	
-	\section{Analytical Approach}
-	This investigation employs two analytical methods, Decision Theory and Systematic Probability Analysis.
-	
-	\subsection{Decision Theory}
-	Sections 3.1, 3.2, and 3.3 present decision problems under uncertainty. Decision Theory includes making rational choices when outcomes are probabilistic. The participant evaluates available actions (e.g., spin or not to spin) by calculating the probability of each result, then selects the action that has the lowest death probability, This transforms the game from pure chance into strategic choice. 
-	
-	\subsection{Systematic Probability Analysis}
-	We systematically analyze how parameters (chambers, bullets, players) affect death probabilities. Rather than making decisions, we calculate the exact probabilities in multiple scenarios to discover the general patterns and derive a fairness theorem. We also define fairness as equal death probability for all players regardless of position. 
-	
-	\subsection{Validation through Simulation}
-	In order to support the analysis, we use Monte Carlo simulations in Python to verify analytical results. By the law of Large Numbers, simulation results converge to theoretical probabilities as trial count increases, providing empirical validation of our formulas. 
-	
-	\section{Scenario Analysis (Simple to Complex)}
-	In scenario a, b, and c (sections 3.1-3.3), the game continues indefinitely with players alternating turns until someone dies, with barrel spinning between each shot if they choose. In In scenarios d and e (sections 3.4-3.5), we analyze a different variant: each player takes exactly ONE shot in sequence, and the game ends after m shots (or when someone dies, whichever comes first). This variant allows us to analyze position advantage and fairness more systematically. We note that in this variant, there is a probability that all players survive (when the bullet is in a chamber that no player reaches).
-	
-	\subsection{Traditional with Spinning (a)}
-	This is quite different from the original playing method of Russian Roulette, which adds the condition of ``spinning the barrel after every trigger pull''. Will you choose to be the first or the second player? And what is the probability of loss?
-	
-	For the answer, as each time the barrel spins after every trigger pull, it is independent. Assume that the probability of loss for the first player is $p$, and $1 - p$ for the second player.
-	
-	\begin{equation}
-		\mathbb{P} = \frac{1}{6} \times 1 + \frac{5}{6} \times (1 - \mathbb{P}) \Rightarrow \mathbb{P} = \frac{6}{11}
-	\end{equation}
-	
-	Therefore, the probability of loss for the player who goes first is $\tfrac{6}{11}$ and $\tfrac{5}{11}$ for who goes second.
-	
-	Obviously, you should choose to go second.
-	
-	
-	\subsection{Two Random Bullets (b)}
-	Compared to the original version, this time there are two bullets in the total of six chambers instead of one. This time we do not choose to go first or second. Your opponent played the first and he was alive after the first trigger pull. You are given the decision whether to spin the barrel (Zhou, 2008). Should you spin the barrel?
-	The answer is to spin the barrel. It is quite simple. If you do not spin the barrel, you will have a probability of $\tfrac{2}{5}$ of loss because your opponent has survived, which leaves five chambers with two bullets. If you spin the barrel, you will have a probability of $\tfrac{2}{6}$ of loss, like a reset, that everything goes 
-	
-	
-	\subsection{Two Consecutive Bullets (c)}
-	Based on the two random bullet scenarios, we have added a new condition that the two bullets are randomly put in two consecutive positions. Thus, if your opponent survived his first round, should you spin the barrel~\cite{zhou2008}?
-	
-	Listing all the positions that the bullets can appear before proceeding. There are only six possible situations: (1,2), (2,3), (3,4), (4,5), (5,6), (6,1), where the numbers from 1 to 6 each represent a position of the chamber.
-	
-	According to the question, we know that the first chamber is empty, which means the possible positions of (1,2) and (6,1) do not apply. The probability of loss will be $\tfrac{1}{4}$ if not spinning the barrel, because from the remaining possible situations, only (2,3) applies that the second shot has a bullet. If spinning the barrel, it means everything resets, and the probability of loss will be $\tfrac{1}{3}$ because there are two out of six possible situations: (1,2) and (6,1), where the first shot is with a bullet.
-	
-	
-	\subsection{N Chambers, n Bullets, m People (d)}
-	Besides merely sticking on 6 chambers, 1 bullet, and 2 people games, we are going to explore more about this game with more variants, focusing on the position advantage and fairness. Changing the number of chambers, bullets, or participants may each has great impact to the game, so how do we decide in more complex situations in a rational way is what we are going to explore. \\[4pt]
-	
-	\subsubsection{\textbf{Building from the Ground Up: The Base Case}}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		Starting from $N=2$, $n=1$, $m=2$, no spinning.\\
-		Sample space: $\{B,E\}$ where $B=$ bullet, $E=$ empty.\\
-		Possible configurations: $(B,E)$ or $(E,B)$ — equally likely.\\[4pt]
-		
-		% 用 description 突出场景
-		\begin{description}[leftmargin=1.8em,labelsep=.5em,font=\bfseries]
-			\item[Scenario 1.] $(B,E)$\\
-			\quad Player 1 pulls chamber 1 $\Rightarrow$ dies.\\
-			\quad Game ends.\\[4pt]
-			
-			\item[Scenario 2.] $(E,B)$\\
-			\quad Player 1 pulls chamber 1 $\Rightarrow$ survives.\\
-			\quad Player 2 pulls chamber 2 $\Rightarrow$ dies.\\[4pt]
-		\end{description}
-		
-		% 为了避免右侧顶栏：用短记号并 align* 对齐
-		Let $B_1$ denote “bullet in chamber 1”, $E_1$ “empty in chamber 1”, and $B_2$ “bullet in chamber 2”. Then
-		\begin{align*}
-			\mathbb{P}(\text{P1 dies}) &= \mathbb{P}(B_1) = \tfrac{1}{2},\\
-			\mathbb{P}(\text{P2 dies}) &= \mathbb{P}(E_1)\,\mathbb{P}(B_2 \mid E_1) = \tfrac{1}{2}.
-		\end{align*}
-	\end{adjustwidth}
-	
-	Thus, we find that this game is fair, no matter which position is chosen. Both players have equal $50\%$ death probability.
-	
-	\subsubsection{\textbf{Scaling Chambers}}
-	
-	Now we add a little complexity to the game. We only change the number of chambers to 3. Now the game involves: $N = 3$, $n = 1$, $m = 2$, no spinning.\\[6pt]
-	
-	\textbf{Player 1’s turn:}\\
-	\[
-	\mathbb{P}(\text{Player 1 dies}) = \tfrac{1}{3}
-	\]
-	
-	\textbf{Player 2’s turn:}\\
-	\[
-	\mathbb{P}(\text{Player 2 dies} \mid \text{Player 1 survives}) = \tfrac{1}{2}
-	\]
-	
-	Therefore, we find that this game is still fair, with both players have equal 33.33\% death.
-	
-	\subsubsection{\textbf{Pattern Recognition}}
-	
-	Now, we are going to explore the death probability if there are more chambers, where there is still one bullet and two people.
-	
-	\renewcommand{\arraystretch}{1.4} % 放大 1.4 倍，可调为 1.3~1.6
-	\begin{table}[h!]
-		\centering
-		\caption{Death Probabilities with Increasing Chambers}
-		\begin{tabular}{@{}cccc@{}}
-			\toprule
-			\textbf{Chambers} & $\mathbb{P}(\text{Player 1 dies})$ & $\mathbb{P}(\text{Player 2 dies})$ & \textbf{Fair?} \\
-			\midrule
-			2 & $\tfrac{1}{2}$ & $\tfrac{1}{2}$ & \checkmark \\
-			3 & $\tfrac{1}{3}$ & $\tfrac{1}{3}$ & \checkmark \\
-			4 & $\tfrac{1}{4}$ & $\tfrac{1}{4}$ & \checkmark \\
-			5 & $\tfrac{1}{5}$ & $\tfrac{1}{5}$ & \checkmark \\
-			6 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & \checkmark \\
-			\bottomrule
-		\end{tabular}
-	\end{table}
-	\renewcommand{\arraystretch}{1.0} % 恢复默认值（防止影响后续表格）
-	
-	
-	The process in which chambers vary can be seen from the appendix.
-	
-	It is worth noting that the sum of $P(\text{Player 1 dies})$ and $P(\text{Player 2 dies})$ does not equal $1$. This is because, in this game variant, there is a probability that both players survive. For example, with $C = 6$, there is a $\tfrac{2}{3}$ probability that the bullet remains in chambers 3--6, meaning both players survive their single shot. This distinguishes our analysis from the traditional ``play until someone dies'' variant analyzed in Section~3.1.
-	
-	\subsubsection{\textbf{Adding More Bullets}}
-	Now the game becomes unfair where there are 6 chambers, 2 bullets, and 2 people:\\
-	
-	\begin{adjustwidth}{2em}{0pt}
-		\begin{align*}
-			\mathbb{P}(\text{P1 dies}) &= \tfrac{2}{6} = \tfrac{1}{3},\\[6pt]
-			\mathbb{P}(\text{P2 dies}) 
-			&= \mathbb{P}(\text{P1 survives}) \times \mathbb{P}(\text{P2 dies} \mid \text{P1 survives}) \\
-			&= \tfrac{4}{6} \times \tfrac{2}{5} = \tfrac{4}{15}.
-		\end{align*}
-	\end{adjustwidth}
-	
-	
-	Obviously, player 2 has advantage, as $\tfrac{1}{3} > \tfrac{4}{15}$.\\[6pt]
-	
-	Now let’s discover if there are more bullets in the definite six-chamber pistol with two participants.
-	
-	
-	
-	\begin{table}[h]
-		\centering
-		\caption{Effect of Bullet Count on Fairness}
-		\begin{tabular}{cccc}
-			\toprule
-			Bullets & Player 1 & Player 2 & Advantage \\
-			\midrule
-			1 & $1/6$ & $1/6$ & Fair \\
-			2 & $1/3$ & $4/15$ & Player 2 \\
-			3 & $1/2$ & $3/10$ & Player 2 \\
-			4 & $2/3$ & $4/15$ & Player 2 \\
-			5 & $5/6$ & $1/6$ & Player 2 \\
-			\bottomrule
-		\end{tabular}
-	\end{table}
-	
-	From the table, when $n=1$, the game is fair. As $n$ increases, Player 2 gains advantage, especially when $n$ is moderate (2--3 bullets).
-	
-	
-	\subsubsection{\textbf{ Adding a Third Player}}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		Things get interesting because now we have the third player to participate in the game. The number of chambers is still six, one bullet, but three people now.
-		
-		\begin{align*}
-			\mathbb{P}(\text{Player 1 dies}) &= \tfrac{1}{6},\\
-			\mathbb{P}(\text{Player 2 dies}) &= \tfrac{5}{6} \times \tfrac{1}{5} = \tfrac{1}{6},\\
-			\mathbb{P}(\text{Player 3 dies}) &= \tfrac{5}{6} \times \tfrac{4}{5} \times \tfrac{1}{4} = \tfrac{1}{6}.
-		\end{align*}
-		
-		Now, we know that whatever which person shoots the first or second or the third, each person’s death probability is still the same.\\[6pt]
-		What if there are more players?\\
-		
-		\begin{table}[h!]
-			\centering
-			\caption{Death Probabilities with Increasing Number of Players (6 Chambers, 1 Bullet)}
-			\renewcommand{\arraystretch}{1.4}
-			\resizebox{\columnwidth}{!}{%
-				\begin{tabular}{@{}cccccc@{}}
-					\toprule
-					\textbf{Number of people} & $\mathbb{P}(\text{P1 dies})$ & $\mathbb{P}(\text{P2 dies})$ & $\mathbb{P}(\text{P3 dies})$ & $\mathbb{P}(\text{P4 dies})$ & $\mathbb{P}(\text{P5 dies})$ \\
-					\midrule
-					2 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A & N/A & N/A \\
-					3 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A & N/A \\
-					4 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & N/A \\
-					5 & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ & $\tfrac{1}{6}$ \\
-					\bottomrule
-				\end{tabular}%
-			}
-		\end{table}
-		
-		
-		The process in which number of people varies can be seen from the appendix.
-	\end{adjustwidth}
-	
-	\subsubsection{\textbf{The General Formula}}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		From the previous sections, we have observed clear patterns in how death probabilities change with different parameters. We now derive a general formula that can predict the death probability for any player in any position. \\[4pt]
-		\textbf{Setting Up the Problem}
-		
-		Let's reclaim the parameters of the Russian Roulette game:
-		\begin{itemize}
-			\item \textbf{C} = number of chambers
-			\item \textbf{n} = number of bullets
-			\item \textbf{m} = number of players (where $m \leq C$)
-			\item \textbf{Player \textit{i}} = the player in position i (where i = 1, 2, 3, ..., m)
-		\end{itemize}
-		
-		Each player takes exactly one shot in sequence. The game ends when someone dies or after all m players have taken their turn. \\[4pt]
-		\textbf{Building the Formula}
-		\textbf{For Player 1:}
-		
-		\begin{align*}
-			\mathbb{P}(\text{Player 1 dies})=\frac{n}{C}
-		\end{align*}
-		
-		Player 1 faces n bullets among C total chambers, quite straightforward. \\[4pt]
-		\textbf{For Player 2:}
-		
-		Player 2 can only take their turn if Player 1 survives. After Player 1's shot.
-		\begin{itemize}
-			\item One chamber has been checked and is empty
-			\item C - 1 chambers remain
-			\item n bullets remain
-		\end{itemize}
-		\begin{align*}
-			\mathbb{P}(\text{Player 2 dies})=\mathbb{P}(\text{Player 1 survives}) \times \mathbb{P}(\text{Player 2 hit bullets} \mid \text{Player 1 survived})=\frac{C-n}{C} \times \frac{n}{C-1}
-		\end{align*}
-		\textbf{For Player 3:}
-		
-		Player 3 can only take their turn if both Player 1 and 2 survive. After their shots:
-		\begin{itemize}
-			\item Two chambers have been checked and are empty
-			\item C - 2 chambers remain
-			\item n bullets remain
-		\end{itemize}
-		\begin{align*}
-			\mathbb{P}(\text{Player 3 dies})=\mathbb{P}(\text{Both P1 and P2 survive}) \times\mathbb{P}(\text{P3 hits bullet}\mid\text{both survived}) = \frac{C-n}{C}\times\frac{C-n-1}{C-1}\times\frac{n}{C-2} 
-		\end{align*}
-		\textbf{For Player i (General Case):}
-		
-		Before Player i's turn:
-		\begin{itemize}
-			\item Player 1 through $i-1$ have all survived
-			\item $i-1$ chambers have been checked and are empty
-			\item $C-(i-1)$ chambers remain
-			\item $n$ bullets remain
-		\end{itemize}
-		
-		The general formula is:
-		\begin{align}
-			P(\text{Player \textit{i} dies})=\lbrack\prod_{j=1}^{i-1} \frac{C-j+1-n}{C-j+1}\rbrack \times \frac{n}{C-i+1}
-		\end{align}
-		Expanded form:
-		\begin{align*}
-			\mathbb{P}(\text{Player \textit{i} dies})
-			&= \frac{C-n}{C}\times\frac{C-1-n}{C-1} \times\frac{C-2-n}{C-2}\times\dots\times\frac{C-i+2-n}{C-i+2}\times\frac{n}{C-i+1}\\
-		\end{align*}
-		Where: 
-		\begin{itemize}
-			\item The first $i-1$ terms represent the probability that all previous players survive
-			\item The last term is the probability that Player i hits a bullet\\
-		\end{itemize}
-		\textbf{The Special Case: $n=1$ (Single bullet)}
-		
-		When there is exactly one bullet, something surprises. Let's substitute n = 1 into the general formula:
-		\begin{align*}
-			\mathbb{P}(\text{Player \textit{i} dies})
-			&= \frac{C-1}{C}\times\frac{C-2}{C-1}\times\frac{C-3}{C-2}\times\dots\times\frac{C-\textit{i}+1}{C-\textit{i}+2}\times\frac{1}{C-\textit{i}+1}
-		\end{align*}
-		
-		This is a \textbf{telescoping product}. Let's write out the full equation:
-		\begin{align*}
-			=\frac{(C-1)\times(C-2)\times(C-3)\times\dots\times(C-\textit{i}+1)\times1}{C\times(C-1)\times(C-2)\times\dots\times(C-\textit{i}+2)\times(C-\textit{i}+1)}
-		\end{align*}
-		After all cancellations:
-		\begin{align*}
-			=\frac{1}{C}
-		\end{align*}
-		
-		\textbf{Key Discovery:} When $n = 1$, every player has the exact same death probability of $\frac{1}{C}$, regardless of their position $i$!\\[2pt]
-		And yet it explains all or observations: 
-		\begin{itemize}
-			\item $C=2$, $n=1$: All players have probability $\frac{1}{2}$
-			\item $C=3$, $n=1$: All players have probability $\frac{1}{3}$
-			\item $C=6$, $n=1$: All players have probability $\frac{1}{6}$\\
-		\end{itemize}
-		\textbf{Applying the Formula to a New Scenario}
-		
-		We can now calculate probabilities for configurations we have not analyzed before.\\[4pt]
-		\textbf{Consider C = 10 chambers, n = 3 bullets, m = 3 players}\\[2pt]
-		Player 1: 
-		\begin{align*}
-			\mathbb{P}(\text{P1 dies})=\frac{3}{10}=0.300
-		\end{align*}
-		Player 2: 
-		\begin{align*}
-			\mathbb{P}(\text{P2 dies})=\frac{10-3}{10}\times\frac{3}{10-1}=0.233
-		\end{align*}
-		Player 3:
-		\begin{align*}
-			\mathbb{P}(\text{P3 dies})=\frac{7}{10}\times\frac{9-3}{9}\times\frac{3}{10-2}=0.175
-		\end{align*}
-		
-		As expected when $n > 1$, later players have progressively lower death probabilities.
-	\end{adjustwidth}
-	
-	
-	\subsubsection{\textbf{Fairness Analysis}}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		\textbf{Defining Fairness}
-		
-		In game theory and decision analysis, a game is considered "fair" when all participants face identical risks or rewards, independent of factors like turn order or position. In the context of the Russian Roulette, we define fairness as follows: \\[4pt]
-		\textbf{Definition}
-		
-		A Russian Roulette game is \textbf{fair} if and only if all players have equal death probability, regardless of their position in the turn order. 
-		Mathematically, for a game with m players: 
-		
-		\begin{align*}
-			\text{Fair} \Longleftrightarrow P(\text{Player 1 dies}) = P(\text{Player 2 dies}) = ... = P(\text{Player m dies})
-		\end{align*}
-		\textbf{Equation To Be Implemented} 
-		
-		This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn. \\[4pt]
-		\textbf{The Fairness Theorem}
-		
-		Based on our systematic explorations above, we can now state our main throretical result. \\[4pt]
-		\textbf{Theorem (Fairness Condition)}
-		
-		For a Russioan Roulette game with C chambers, n bullets, and m players (where $m \le C$ and $n \le C$), the game is fair if and only if $n=1$ \\
-		This theorem has two parts we must prove:
-		\begin{itemize}
-			\item \textbf{If $n=1$, then the game is fair} (Sufficiency)
-			\item \textbf{If the game is fair, then $n=1$} (Necessity), equivalently, if $n \neq 1$, the game is not fair\\
-		\end{itemize}
-		\textbf{Proof}\\
-		\textbf{Part 1: Sufficiency}
-		
-		We already derived in previous sections that when $n=1$, the general formula simplifies through telescoping:
-		
-		\begin{align*}
-			\mathbb{P}(\text{Player } i \text{ dies}) 
-			&= \frac{C-1}{C} \times \frac{C-2}{C-1} \times \frac{C-3}{C-2} \times\dots\times\frac{C-(i-1)}{C-(i-2)} \times \frac{1}{C-(i-1)} \\[6pt]
-			&= \frac{1}{C}
-		\end{align*}
-		
-		Since this is \textbf{independent of $i$}, all players have equal probability $\tfrac{1}{C}$ when $n = 1$.
-		Therefore, if $n = 1$, then $\mathbb{P}$(\text{Player } i \text{ dies}) = $\tfrac{1}{C}$ for all $i$, which means the game is fair. \\[4pt]
-		\textbf{Part 2: Necessity}
-		
-		We have proved that: if $n\geq2$, the game becomes unfair. 
-		From our general formula: 
-		
-		\begin{align*}
-			\mathbb{P}(\text{Player 1 dies})= \frac{n}{C}
-		\end{align*}
-		\begin{align*}
-			\mathbb{P}(\text{Player 2 dies})= \frac{C-n}{C} \times \frac{n}{C-1}=\frac{n(C-n)}{C(C-1)}
-		\end{align*}
-		
-		For the game to be fair, these must be equal. 
-		\begin{align*}
-			\frac{n}{C}= \frac{C-n}{C} \times \frac{n}{C-1}=\frac{n(C-n)}{C(C-1)}
-		\end{align*}
-		
-		Assuming $n > 0$ (otherwise there is no game), we can divide both side by $\frac{n}{C}$:
-		\begin{align*}
-			1=\frac{C-n}{C-1}\\
-			C-1 = C-n\\
-			n = 1
-		\end{align*}
-		
-		This shows that \textbf{if} Player 1 and Player 2 have equal death probabiilty, \textbf{then} n must equal 1. 
-		Thus, if $n \neq 1$ or if $n \geq 2$, then $\mathbb{P}(\text{Player 1 dies}) \neq\mathbb{P}(\text{Player 2 dies})$, meaning the game is unfair. So, the game is fair if and only if  $n=1$.\\[4pt]
-		\textbf{Which Player Has the Advantage When $n \geq 2$? }
-		
-		We have found out that the game is unfair when $n \geq 2$, but who benefits from this unfairness?
-		Let's compare Player 1 and Player 2:
-		\begin{align*}
-			\mathbb{P}(\text{Player 1 dies})-\mathbb{P}(\text{Player 2 dies})=\frac{n}{C}-\frac{n(C-n)}{C(C-1)}
-		\end{align*}
-		Factor out $\frac{n}{C}$
-		\begin{align*}
-			&= \frac{n}{C}\lbrack1-\frac{C-n}{C-1}\rbrack \\
-			&= \frac{n}{C}\lbrack\frac{C-1-(C-n)}{C-1}\rbrack \\
-			&= \frac{n}{C}\times\frac{n-1}{C-1}
-		\end{align*}
-		
-		Carefully examining, When $n=1$, the difference equals 0 (fairness). When $n\geq2$, Since $n-1\geq1>0$, the difference is strictly positive. Thus, when $n \geq 2$, we have $\mathbb{P}(\text{Player 1 dies})>\mathbb{P}(\text{Player 2 dies})$, meaning $\textbf{Player 2 has a survival advantage}$.
-		This advantage increases with $n$. The later you go in the turn order, the better your chances of survival (up to a point). 
-		Let's verify our theorem against the data we collected from $4) \textbf{\textit{ Adding More Bullets}}$
-		\begin{table}[h]
-			\centering
-			\caption{Effect of Bullet Count on Fairness with Difference}
-			\begin{tabular}{ccccc}
-				\toprule
-				Bullets & Player 1 & Player 2 & Difference & Fair? \\
-				\midrule
-				1 & $1/6$ & $1/6$ & $0.000$ & \checkmark \\
-				2 & $1/3$ & $4/15$ & $0.067$ & $\times$ \\
-				3 & $1/2$ & $3/10$ & $0.200$ & $\times$ \\
-				4 & $2/3$ & $4/15$ & $0.400$ & $\times$ \\
-				5 & $5/6$ & $1/6$ & $0.667$ & $\times$ \\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		
-		The data confirms our theorem: fairness occurs only when $n=1$.
-		Notice that the advantage for Player 2 grows as the number of bullets(n) increases, reaching a maximum difference of 0.667 when $n=5$. \\[4pt]
-		\textbf{Insights: The single-Bullet Special Case}
-		
-		The fact that $n = 1$ produces a fair game is mathematically elegant. Despite players going in sequence and gaining information from previous survivors, the conditional probabilities perfectly balance out. The bullet "doesn't care" about turn order when there is only one.\\[4pt]
-		\textbf{Insights: Why Multiple Bullets Create Unfairness}
-		
-		When $n \geq 2$, Player 1 faces n bullets among C chambers (probability $\frac{n}{C}$). If Player 1 survives, they have eliminated one safe chamber but no bullets. Player 2 now faces n bullets among only $C-1$ chambers, but this ratio $\frac{n}{C-1}$ is less deadly than $\frac{n}{C}$ because the denominator decreased by 1 while bullets stayed constant. Mathematically:
-		\begin{align*}
-			\frac{n}{C-1} < \frac{n}{C} \text{ for all } n \geq 1 \text{,} C \geq 2.
-		\end{align*}
-		
-		However, Player 2 only reaches their turn if Player 1 survives, which happens with probability $\frac{C-n}{C}$. The combined effect still favors Player 2 when $n \geq 2$.\\[4pt]
-		\textbf{Insights: Practical Decision-Making}
-		
-		If forced to play Russian Roulette with $n \geq 2$ bullets, rational players should prefer later positions. With $n = 5$ bullets in a 6-chamber gun, Player 2's death probability $\frac{1}{6}$ is dramatically better than Player 1's $\frac{5}{6}$.\\[4pt]
-		\textbf{Insights: Fairness as a Design Principle}
-		
-		From a game design perspective, if we want to create a "fair" Russian Roulette variant (perhaps as a thought experiment or decision-making exercise), we must use exactly one bullet regardless of how many chambers or players are involved.\\[4pt]
-		\textbf{Measuring Unfairness: The Fairness Index}
-		
-		To quantify how unfair a game is, we can define a \textbf{fairness} index as the standard deviation of death probabilities across all players. For two players:
-		\begin{align*}
-			\text{Fairness Index}=\sqrt{\frac{{\lbrack P(P_1)-\bar{P}\rbrack}^{2}+{\lbrack P(P_2)-\bar{P}\rbrack}^{2}}{2}}
-		\end{align*}
-		where $\bar{P}=\frac{P(P_1)+P(P_2)}{2}$ is the mean death probability. \\[4pt]
-		
-		When the game is fair, all probabilities are equal, so the standard deviation is 0. The higher the index, the more unfair the game.\\
-		For our $C=6$ examples:
-		\begin{table}[h]
-			\centering
-			\caption{Fairness Index with Interpretation on different bullets}
-			\begin{tabular}{ccc}
-				\toprule
-				Bullets & Fairness Index & Interpretation \\
-				\midrule
-				1 & $0.000$ & Perfectly fair \\
-				2 & $0.033$ & Slight unfairness \\
-				3 & $0.100$ & Moderate unfairness \\
-				4 & $0.200$ & High unfairness \\
-				5 & $0.333$ & Extreme unfairness \\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		
-		This quantitative measure helps us compare different game configurations objectively.
-	\end{adjustwidth}
-	
-	\subsection{Optimal Stopping Problem (e)}
-	
-	\subsubsection{Background and Scenario}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		In this part, we will be analyzing the optimal stopping problem, to find out when will be the best point to stop when we play in Russian Roulette that involve values for win/forfeit/lose. On the other word, \textbf{WHEN should you quit to avoid lose?} To find this out in a more interesting way, we implement a background for the game as follows: \textbf{\textit{The Prisoner's Tournament}}. Two prisoners are offered a chance at freedom through a Russian Roulette tournament with the following rules:\\[4pt]
-		\textbf{Setup}
-		\begin{itemize}
-			\item One revolver with C chambers and n bullets
-			\item \textbf{No spinning between shots}
-			\item Bullets remain in their original positions throughout a round\\
-		\end{itemize}
-		\textbf{Game rules}
-		\begin{itemize}
-			\item The game proceeds in rounds: Round 1, Round 2, Round 3...
-			\item You will have the first shots, then your opponent (if still alive)
-			\item You can choose whether to forfeit or not before a new round, your opponent are settled as never forfeiting\\
-		\end{itemize}
-		\textbf{Payoff Structure}
-		
-		Assume that your remaining prison sentence is T = 10 years
-		\begin{table}[h]
-			\centering
-			\caption{Payoff Structure of the Prison's Tournament}
-			\begin{tabular}{ccc}
-				\toprule
-				Outcome &  Result & Utility \\
-				\midrule
-				You win (opponent dies) & Leave prison & U win = +10 years \\
-				You forfeit & Stay in prison& U forfeit = 0 \\
-				You die & Stay longer in prison & Moderate unfairness \\
-				Opponent wins (you forfeit) & $0.200$ & High unfairness \\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		
-		After surviving k rounds (2k of shots in total), should we continue to round k+1 or forfeit?\\
-		
-	\end{adjustwidth}
-	
-	\subsubsection{Calculations}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		To start with, we will calculate the death probability: 
-		\begin{itemize}
-			\item After round 1:\\$\mathbb{P}(\text{death})=\frac{n}{C-2}>\frac{n}{C}$
-			\item After round k:\\$\mathbb{P}(\text{death})=\frac{n}{C-2k}$ keeps increasing\\
-		\end{itemize}
-		With the example of (C = 10, n = 2):
-		\begin{itemize}
-			\item Round 1: $\mathbb{P}(\text{you die})=\frac{2}{10}=0.20$
-			\item Round 2: $\mathbb{P}(\text{you die})=\frac{2}{8}=0.25$
-			\item Round 3: $\mathbb{P}(\text{you die})=\frac{2}{6}=0.33$
-			\item Round 4: $\mathbb{P}(\text{you die})=\frac{2}{4}=0.50$
-			\item Round 5: $\mathbb{P}(\text{you die})=\frac{2}{2}=1.00$ (Must die)
-		\end{itemize}
-		
-		In round 5, we can find out that there will be a promised died if we keep running the game. Thus, the death probability becomes so high that expected utility turns negative, making forfeiture optimal. \\[4pt]
-		Before round k, we have:
-		\begin{itemize}
-			\item Chambers remaining: $C-2(k-1)=C-2k+2$
-			\item Bullets remaining $n$
-			\item Empty chambers confirmed: $2k-2$
-		\end{itemize}
-		
-		If we continue round K, three possible outcomes may occur: 
-		\begin{enumerate}
-			\item Probability of you die in round K:\\$P(\text{you die in round k})=\frac{n}{C-2k+2}$\\
-			\item Probability of you surviving but opponent dies in:\\$P(\text{you win in round k}=\frac{C-2k+2-n}{C-2k+2})\times\frac{n}{C-2k+1}$\\
-			\item Both survived (game continues):\\$P(\text{both survive})=\frac{C-2k+2-n}{C-2k+2}\times\frac{C-2k+1-n}{C-2k+1}$\\
-		\end{enumerate}
-		
-		To find the Expected Utility Calculations to quantify an expectation on utility, we:
-		Let $V_k$ = Expected Utility of continuing from Round k onward (before taking your shot in Round k)
-		\begin{align*}
-			V_k=\mathbb{P}(die)\times U_{death}+\mathbb{P}(win)_k\times U_{win}+\mathbb{P}(\textit{both survive})_k\times V_{k+1}
-			=\frac{n}{C-2k+2}\times(-1)+\frac{C-2k+2-n}{C-2k+2}\times\frac{n}{C-2k+1}\times(10)+\frac{C-2k+2-n}{C-2k+2}\times{C-2k+1-n}{C-2k+1}\times V_{k+1}
-		\end{align*}
-		
-		Terminal condition: When $C-2k+2=n$ (only $n$ chambers left, all with bullets), you must be died in the coming round if it is your turn, which can be recognized as: 
-		\begin{align*}
-			V_k=-1
-		\end{align*}
-		
-		Therefore, if:
-		$V_k>0$, we can continue to round k, which means positive utility is still expected
-		$V_k<0$, we should forfeit before round k as a negative utility is going to happen\\
-		
-		Thus, the Optimal Stopping Condition will be:
-		\begin{align*}
-			k^*=max\{k:V_k>0\}
-		\end{align*}
-		
-		Continue through round $k^*$, so forfeit before round $k^*+1$. So, the maximum possible rounds will be:
-		\begin{align*}
-			k_{max}=\lfloor \frac{C}{2}\rfloor \text{ such that } C-2k_{max}+2 \geq n
-		\end{align*}
-		
-		Now we will use some examples before going though a general result.
-		\begin{enumerate}
-			\item Example 1:\\[4pt]$C=6$ chambers, $n=1$ bullet\\[4pt]Round 3 (terminal round): 2 chambers, 1 bullet
-			\begin{enumerate}
-				\item $\mathbb{P}(\text{you die})=\frac{1}{2}$
-				\item $\mathbb{P}(\text{you win})=\frac{1}{2}\times\frac{1}{1}=\frac{1}{2}$
-				\item $\mathbb{P}(\text{both survive})=0(\text{game must end})$\\
-			\end{enumerate}
-			$V_3=\frac{1}{12}\times (-1)+\frac{1}{12}\times (10)=0.5+5=4.5$\\
-			
-			Round 2: 4 chambers, 1 bullet\\
-			$V_2=4.5$\\[4pt]
-			Round 1: 6 chambers, 1 bullet\\
-			$V_1=4.5$
-			\begin{align*}
-				V_1=V_2=V_3=4.5>0
-			\end{align*}
-			
-			Therefore, the Optimal Strategy for 6 chambers and 1 bullet is to continue all the way (never forfeit).\\
-			\item Example 2:\\[4pt]$C=6$ chambers, $n=2$ bullets\\[4pt]Round 3 (Terminal Round): 2 chambers, 2 bullets
-			\begin{align*}
-				V_3=1\times (-1)=-1
-			\end{align*}
-			Round 2: 4 chambers, 2 bullets\\
-			$V_2=2.67$\\[4pt]
-			Round 1: 6 chambers, 2 bullets\\
-			$V_1=3.4$\\[4pt]
-			Result:\\
-			$V_3=3.4>0$, continue\\
-			$V_2=2.67>0$, continue\\
-			$V_1=-1<0$, forfeit\\
-			
-			Therefore, the Optimal Strategy for 6 chambers and 2 bullets is to continue playing in round 1 and 2, and forfeit before round 3.\\
-			\item General Results of an optimal stopping table:
-			\begin{table}[h]
-				\centering
-				\caption{Optimal Stopping Table}
-				\begin{tabular}{ccccccc}
-					\toprule
-					C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & Optimal Strategy \\
-					\midrule
-					6 & 1 & 4.50 & 4.50 & 4.50 & N.A. & Never forfeit\\
-					6 & 2 & 3.40 & 2.67 & -1 & N.A. & Forfeit before R3 \\
-					6 & 3 & 2.85 & 1.75 & N.A. & N.A. & Forfeit before R3 \\
-					8 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
-					8 & 2 & 3.87 & 3.54 & 2.67 & 1 & Forfeit before R4 \\
-					10 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
-					10 & 2 & 4.12 & 3.92 & 3.54 & 2.67 & Never forfeit\\
-					10 & 3 & 4.43 & 4.11 & 3.40 & 1.75 & Never forfeit\\
-					10 & 5 & 2.75 & 2.14 & 0.83 & N.A. & Forfeit before R3\\
-					\bottomrule
-				\end{tabular}
-			\end{table}
-		\end{enumerate}
-		
-	\end{adjustwidth}
-	
-	\subsubsection{Results}
-	
-	\begin{adjustwidth}{2em}{0pt}
-		
-		\textbf{The single bullet special case}
-		\begin{itemize}
-			\item When $n=1$, the expected utility $(V_k)$ will always be 4.5, which means you should NOT forfeit for any situation like this.
-			\item The increasing death probability is exactly offset by the decreasing game continuation probability.
-			\item This matches what we found from the previous discovery, which the game is fair if and only if $n=1$.\\
-		\end{itemize}
-		\textbf{Bullet density relationship}
-		
-		If it seems that, the calculation steps are complicated, taking a lot of time to determine the result to whether forfeit or not, is there a simpler way to do a brief prediction? Yes, there are. We find that there is a density ratio of $r=\frac{n}{c}$, when: 
-		\begin{itemize}
-			\item $r \leq0.2$, it is most likely optimal to continue all the rounds.
-			\item $0.2\leq r\leq0.4$, it is most likely optimal to forfeit before maximum round.
-			\item $r \leq0.4$, it is most likely optimal to forfeit early (after 1 or 2 rounds).\\
-		\end{itemize}
-		\textbf{Pattern of Expected Utility $V_k$}
-		\begin{itemize}
-			\item It usually starts high before the game
-			\item It gradually decreases on 1 point, and that is where we should stop
-		\end{itemize}
-		\begin{table}[h]
-			\centering
-			\caption{Supporting Example}
-			\begin{tabular}{ccccccc}
-				\toprule
-				C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & Optimal Strategy \\
-				\midrule
-				6 & 2 & 3.40 & 2.67 & -1 & N.A. & forfeit before R3\\
-				\bottomrule
-			\end{tabular}
-		\end{table}
-		
-	\end{adjustwidth}
-	
-	\section{Simulation}
-	
-	\section*{}
-	\begin{thebibliography}{9}
-		\bibitem{zhou2008} X. Zhou, \textit{Practical Guide to Quantitative Finance Interviews}, CreateSpace, 2008.
-		\bibitem{sternstein2024} M. Sternstein, \textit{AP Statistics Premium, 2025}, Kaplan North America, LLC, 2024.
-	\end{thebibliography}
-	
-	\section*{Appendix}
 	
 \end{document}
