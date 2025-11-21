@@ -30,8 +30,7 @@
 		Department of Mathematics and Information Technology\\
 		The Education University of Hong Kong\\
 		MTH4169: Introduction to Probability and Statistics\\
-		Professor Zhang Junyi\\
-		November 11, 2025}
+		November 22, 2025}
 	
 	\maketitle
 	\thispagestyle{fancy} % first page 页眉页脚
@@ -456,9 +455,7 @@
 				&= \mathbb{P}(\text{Player m dies})
 			\end{split}
 		\end{equation*}\\[4pt]
-		
-		
-		\textbf{Equation To Be Implemented} 
+		\textbf{Equation To B-e Implemented} 
 		
 		This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn. \\[4pt]
 		\textbf{The Fairness Theorem}
@@ -596,7 +593,7 @@
 		This quantitative measure helps us compare different game configurations objectively.
 	\end{adjustwidth}
 	
-	\subsection{Optimal Stopping Problem (e)}
+	\subsection{\textbf{Optimal Stopping Problem (e)}}
 	
 	\subsubsection{Background and Scenario}
 	
@@ -664,7 +661,7 @@
 			If we continue round K, three possible outcomes may occur: 
 			\begin{enumerate}
 				\item Probability of you die in round K:\\$\mathbb{P}(\text{you die in round k})=\frac{n}{C-2k+2}$\\
-				\item Probability of you surviving but opponent dies in:\\$\mathbb{P}(\text{you win in round k}=\frac{C-2k+2-n}{C-2k+2})\times\frac{n}{C-2k+1}$\\
+				\item Probability of you surviving but opponent dies in:\\$\mathbb{P}(\text{you win in round k}=\frac{C-2k+2-n}{C-2k+2}\times\frac{n}{C-2k+1}$\\
 				\item Both survived (game continues):\\$\mathbb{P}(\text{both survive})=\frac{C-2k+2-n}{C-2k+2}\times\frac{C-2k+1-n}{C-2k+1}$\\
 			\end{enumerate}
 			
@@ -779,7 +776,7 @@
 			\begin{itemize}
 				\item $r \leq0.2$, it is most likely optimal to continue all the rounds.
 				\item $0.2\leq r\leq0.4$, it is most likely optimal to forfeit before maximum round.
-				\item $r \leq0.4$, it is most likely optimal to forfeit early (after 1 or 2 rounds).\\
+				\item $r \geq 0.4$, it is most likely optimal to forfeit early (after 1 or 2 rounds).\\
 			\end{itemize}
 			\textbf{Pattern of Expected Utility $V_k$}
 			\begin{itemize}
