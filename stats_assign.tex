@@ -720,7 +720,7 @@
 					\item $\mathbb{P}(\text{you win})=\frac{1}{2}\times\frac{1}{1}=\frac{1}{2}$
 					\item $\mathbb{P}(\text{both survive})=0(\text{game must end})$\\
 				\end{enumerate}
-				$V_3=\frac{1}{12}\times (-1)+\frac{1}{12}\times (10)=0.5+5=4.5$\\
+				$V_3=\frac{1}{2}\times (-1)+\frac{1}{2}\times (10)=0.5+5=4.5$\\
 				
 				Round 2: 4 chambers, 1 bullet\\
 				$V_2=4.5$\\[4pt]
@@ -749,19 +749,19 @@
 				\begin{table}[h]
 					\centering
 					\caption{Optimal Stopping Table}
-					\begin{tabular}{ccccccc}
+					\begin{tabular}{cccccccc}
 						\toprule
-						C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & Optimal Strategy \\
+						C & n & $V_1$ & $V_2$ & $V_3$ & $V_4$ & $V_5$ & Optimal Strategy \\
 						\midrule
-						6 & 1 & 4.50 & 4.50 & 4.50 & N.A. & Never forfeit\\
-						6 & 2 & 3.40 & 2.67 & -1 & N.A. & Forfeit before R3 \\
-						6 & 3 & 2.85 & 1.75 & N.A. & N.A. & Forfeit before R3 \\
-						8 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
-						8 & 2 & 3.87 & 3.54 & 2.67 & 1 & Forfeit before R4 \\
-						10 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
-						10 & 2 & 4.12 & 3.92 & 3.54 & 2.67 & Never forfeit\\
-						10 & 3 & 4.43 & 4.11 & 3.40 & 1.75 & Never forfeit\\
-						10 & 5 & 2.75 & 2.14 & 0.83 & N.A. & Forfeit before R3\\
+						6 & 1 & 4.50 & 4.50 & 4.50 & N.A. & N.A. &Never forfeit\\
+						6 & 2 & 3.40 & 2.67 & -1 & N.A. & N.A. & Forfeit before R3 \\
+						6 & 3 & 2.85 & 1.75 & N.A. & N.A. & N.A. & Play through R2 \\
+						8 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & N.A. & Never forfeit\\
+						8 & 2 & 3.71 & 3.40 & 2.67 & -1 & N.A. & Forfeit before R4 \\
+						10 & 1 & 4.50 & 4.50 & 4.50 & 4.50 & 4.50 & Never forfeit\\
+						10 & 2 & 3.89 & 3.71 & 3.40 & 2.67 & -1 & Forfeit before R5\\
+						10 & 3 & 3.58 & 3.32 & 2.85 & 1.75 & N.A. & Never forfeit\\
+						10 & 5 & 2.75 & 2.14 & 0.83 & N.A. & N.A & Play through R3\\
 						\bottomrule
 					\end{tabular}
 				\end{table}
