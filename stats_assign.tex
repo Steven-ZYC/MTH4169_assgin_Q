@@ -563,7 +563,7 @@
 		
 		When $n \geq 2$, Player 1 faces n bullets among C chambers (probability $\frac{n}{C}$). If Player 1 survives, they have eliminated one safe chamber but no bullets. Player 2 now faces n bullets among only $C-1$ chambers, but this ratio $\frac{n}{C-1}$ is less deadly than $\frac{n}{C}$ because the denominator decreased by 1 while bullets stayed constant. Mathematically:
 		\begin{align*}
-			\frac{n}{C-1} < \frac{n}{C} \text{ for all } n \geq 1 \text{,} C \geq 2.
+			\frac{n}{C-1} > \frac{n}{C} \text{ for all } n \geq 1 \text{,} C \geq 2.
 		\end{align*}
 		
 		However, Player 2 only reaches their turn if Player 1 survives, which happens with probability $\frac{C-n}{C}$. The combined effect still favours Player 2 when $n \geq 2$.\\[4pt]
@@ -709,7 +709,7 @@
 			
 			Continue through round $k^*$, so forfeit before round $k^*+1$. So, the maximum possible rounds will be:
 			\begin{align*}
-				k_{max}=\lfloor \frac{C}{2}\rfloor \text{ such that } C-2k_{max}+2 \geq n
+				k_{max}=\lfloor \frac{C+2-n}{2}\rfloor
 			\end{align*}
 			
 			Now we will use some examples before going though a general result.
@@ -826,7 +826,7 @@
 		take turns firing exactly once at chambers $1$ to $m$ in order.  If a bullet
 		is encountered, that player is recorded as dead and the game ends; if no
 		bullet is encountered within the first $m$ chambers, the game ends with all
-		players surviving.  Repeating this procedure for $10^5$ independent games,
+		players surviving.  Repeating this procedure for 150,000 independent games,
 		we estimate the empirical death probability $\hat{p}_i$ for each player $i$
 		as the proportion of runs in which Player~$i$ dies.
 		
