@@ -163,7 +163,7 @@
 	
 	\subsubsection{\textbf{Scaling Chambers}}
 	
-	Now we add a little complexity to the game. We only change the number of chambers to 3. Now the game involves: $N = 3$, $n = 1$, $m = 2$, no spinning.\\[6pt]
+	Now we add a little complexity to the game. We only change the number of chambers to 3. Now the game involves: $N = 3$, $n = 1$, $m = 2$, no spinning.\\[4pt]
 	
 	\textbf{Player 1’s turn:}\\
 	\[
@@ -172,8 +172,16 @@
 	
 	\textbf{Player 2’s turn:}\\
 	\[
+	\mathbb{P}(\text{Player 1 survives}) = 1 - \tfrac{1}{3} = \tfrac{2}{3}
+	\]
+	\[
 	\mathbb{P}(\text{Player 2 dies} \mid \text{Player 1 survives}) = \tfrac{1}{2}
 	\]
+	\begin{align*}
+		\mathbb{P}(P_2 \text{ dies})
+		&= \mathbb{P}(P_1 \text{ survives}) \cdot \mathbb{P}(P_2 \text{ dies} \mid P_1 \text{ survives}) \\
+		&= \Bigl(1 - \tfrac{1}{3}\Bigr) \cdot \tfrac{1}{2} = \tfrac{1}{3}
+	\end{align*}
 	
 	Therefore, we find that this game is still fair, with both players have equal 33.33\% death.
 	
@@ -294,6 +302,7 @@
 		
 		Each player takes exactly one shot in sequence. The game ends when someone dies or after all m players have taken their turn. \\[4pt]
 		\textbf{Building the Formula}
+		
 		\textbf{For Player 1:}
 		
 		\begin{align*}
@@ -455,7 +464,7 @@
 				&= \mathbb{P}(\text{Player m dies})
 			\end{split}
 		\end{equation*}\\[4pt]
-		\textbf{Equation To B-e Implemented} 
+		\textbf{Equation To Be Implemented} 
 		
 		This definition captures an intuitive notion of fairness: no player should have a systematic advantage or disadvantage based solely on when they take their turn. \\[4pt]
 		\textbf{The Fairness Theorem}
